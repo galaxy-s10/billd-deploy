@@ -1,3 +1,12 @@
+## [1.0.2](https://github.com/galaxy-s10/ldcloud-deploy/compare/v1.0.1...v1.0.2) (2023-02-21)
+
+
+### feat
+
+* 依赖 ([056ecba](https://github.com/galaxy-s10/ldcloud-deploy/commit/056ecbad0e28fa2b29656bfede3ebef6722f1597))
+
+
+
 ## 1.0.1 (2023-02-21)
 
 
