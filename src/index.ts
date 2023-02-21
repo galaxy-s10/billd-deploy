@@ -1,12 +1,13 @@
-const { handleBuild } = require('./build');
-const { handleAliOssCDN } = require('./cdn/ali-oss');
-const { handleHuaweiObsCDN } = require('./cdn/huawei-obs');
-const { handleSSH } = require('./ssh');
-const { chalkSUCCESS, chalkERROR } = require('./utils/chalkTip');
-const { generateDeployFile, deleteDeployFile } = require('./utils/git');
-const { handleNuxtTip } = require('./utils/nuxtTip');
+import { handleBuild } from './build';
+import { handleAliOssCDN } from './cdn/ali-oss';
+import { handleHuaweiObsCDN } from './cdn/huawei-obs';
+import { BilldDeploy } from './interface';
+import { handleSSH } from './ssh';
+import { chalkSUCCESS, chalkERROR } from './utils/chalkTip';
+import { generateDeployFile, deleteDeployFile } from './utils/git';
+import { handleNuxtTip } from './utils/nuxtTip';
 
-async function main({ env, config }) {
+export const deploy = async function ({ env, config }: BilldDeploy) {
   if (!config || !env) {
     console.log(chalkERROR('缺少env或config！'));
     return;
@@ -36,6 +37,4 @@ async function main({ env, config }) {
   } catch (error) {
     console.log(chalkERROR(`构建${env}出错`), error);
   }
-}
-
-module.exports.deploy = main;
+};

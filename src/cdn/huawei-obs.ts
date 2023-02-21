@@ -1,13 +1,14 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
-const OSS = require('ali-oss');
+import OBS from 'esdk-obs-nodejs';
 
-const { chalkERROR, chalkSUCCESS, chalkINFO } = require('../utils/chalkTip');
-const Queue = require('../utils/queue');
+import { BilldDeploy } from '../interface';
+import { chalkERROR, chalkSUCCESS, chalkINFO } from '../utils/chalkTip';
+import Queue from '../utils/queue';
 
-module.exports.handleAliOssCDN = function (data = { env: 'prod', config: {} }) {
-  const { aliOssConfig, aliOssFileConfig } = data.config;
+export const handleHuaweiObsCDN = function (data: BilldDeploy) {
+  const { huaweiObsConfig, huaweiObsFileConfig } = data.config;
 
   function findFile(inputDir) {
     const res = [];
@@ -46,18 +47,14 @@ module.exports.handleAliOssCDN = function (data = { env: 'prod', config: {} }) {
     const uploadErrRecord = new Map(); // 上传失败记录
     const allFile = []; // 所有需要上传的文件
 
-    const fileConfig = aliOssFileConfig(data);
+    const fileConfig = huaweiObsFileConfig(data);
 
-    const client = new OSS({
-      // yourregion填写Bucket所在地域。以华东1（杭州）为例，Region填写为oss-cn-hangzhou。
-      region: aliOssConfig.region,
-      // 阿里云账号AccessKey拥有所有API的访问权限，风险很高。强烈建议您创建并使用RAM用户进行API访问或日常运维，请登录RAM控制台创建RAM用户。
-      accessKeyId: aliOssConfig.accessKeyId,
-      accessKeySecret: aliOssConfig.accessKeySecret,
-      // 填写Bucket名称。
-      bucket: aliOssConfig.bucket,
-      // 当前的oss前缀
-      prefix: aliOssConfig.prefix,
+    // https://support.huaweicloud.com/sdk-nodejs-devg-obs/obs_29_0404.html
+    const client = new OBS({
+      access_key_id: huaweiObsConfig.access_key_id,
+      secret_access_key: huaweiObsConfig.secret_access_key,
+      // server : 'https://your-endpoint'
+      server: huaweiObsConfig.server, // 华为obs browser+客户端里面，桶列表，找到对应的桶，看旁边的操作栏里面基本信息，找到Endpoint
     });
 
     // 添加fileConfig目录
@@ -69,27 +66,32 @@ module.exports.handleAliOssCDN = function (data = { env: 'prod', config: {} }) {
     });
 
     // eslint-disable-next-line
-    async function put(ossFlieName, filePath) {
+    async function put(obsBucket, obsFlieName, filePath) {
       try {
-        const result = await client.put(
-          ossFlieName,
-          filePath,
-          // 自定义headers
-          {
-            headers: {
-              // 指定PutObject操作时是否覆盖同名目标Object。此处设置为true，表示禁止覆盖同名Object。设置为false，表示允许覆盖同名Object。
-              'x-oss-forbid-overwrite': 'false',
+        const result = await new Promise((resolve) => {
+          client.putObject(
+            {
+              Bucket: obsBucket,
+              Key: obsFlieName,
+              SourceFile: filePath,
             },
-          }
-        );
-        // const result = { res: { status: 200 } };
-        const status = result.res.status;
+            // eslint-disable-next-line
+            (err, result) => {
+              if (err) {
+                return resolve({ code: 500, err });
+              }
+              resolve({ code: 200, result });
+            }
+          );
+        });
+        // const result = { code: 200 }
+        const status = result.code;
         if (status === 200) {
           uploadOkRecord.set(filePath, status);
           console.log(
             chalkSUCCESS(
               // eslint-disable-next-line
-              `cdn上传成功(${uploadOkRecord.size}/${allFile.length}): ${filePath} ===> ${ossFlieName}`
+              `cdn上传成功(${uploadOkRecord.size}/${allFile.length}): ${filePath} ===> ${obsFlieName}`
             )
           );
         } else {
@@ -123,21 +125,26 @@ module.exports.handleAliOssCDN = function (data = { env: 'prod', config: {} }) {
       allFile.forEach((filePath) => {
         if (fileConfig.file.local.includes(filePath)) {
           const filename = filePath.split(path.sep).pop();
-          const ossFlieName = path.join(aliOssConfig.prefix, filename);
+          const obsFlieName = path.join(
+            fileConfig.file.remote.obsPrefix,
+            filename
+          );
           uploadQueue.addTask(() =>
             put(
-              path.sep === '/' ? ossFlieName : ossFlieName.replace(/\\/g, '/'),
+              fileConfig.file.remote.obsBucket,
+              path.sep === '/' ? obsFlieName : obsFlieName.replace(/\\/g, '/'),
               filePath
             )
           );
         } else {
           const dirName = fileConfig.dir.local.split(path.sep).pop();
-          const ossFlieName =
-            aliOssConfig.prefix +
+          const obsFlieName =
+            fileConfig.dir.remote.obsPrefix +
             filePath.replace(fileConfig.dir.local, path.sep + dirName);
           uploadQueue.addTask(() =>
             put(
-              path.sep === '/' ? ossFlieName : ossFlieName.replace(/\\/g, '/'),
+              fileConfig.file.remote.obsBucket,
+              path.sep === '/' ? obsFlieName : obsFlieName.replace(/\\/g, '/'),
               filePath
             )
           );

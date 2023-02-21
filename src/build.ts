@@ -1,6 +1,7 @@
-const { execSync, exec } = require('child_process');
+import { execSync, exec } from 'child_process';
 
-const { chalkSUCCESS } = require('./utils/chalkTip');
+import { BilldDeploy } from './interface';
+import { chalkSUCCESS } from './utils/chalkTip';
 
 function gitIsClean() {
   return new Promise((resolve, reject) => {
@@ -78,7 +79,7 @@ function diffRemote() {
   });
 }
 
-module.exports.handleBuild = async (data = { env: 'prod' }) => {
+export const handleBuild = async (data: BilldDeploy) => {
   if (data.env === 'prod') {
     await gitIsClean();
     await hasRemoteBranch();

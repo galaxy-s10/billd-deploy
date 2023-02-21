@@ -2,16 +2,37 @@
   "name": "billd-deploy",
   "version": "1.0.2",
   "description": "部署脚本",
+  "keywords": [
+    "billd",
+    "deploy",
+    "qiniu",
+    "ali-oss",
+    "esdk-obs-nodejs"
+  ],
+  "homepage": "https://github.com/galaxy-s10/billd-deploy",
+  "bugs": {
+    "url": "https://github.com/galaxy-s10/billd-deploy/issues"
+  },
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/galaxy-s10/billd-deploy"
   },
-  "license": "ISC",
-  "author": "",
-  "main": "./src/index.js",
+  "license": "MIT",
+  "author": "shuisheng <https://github.com/galaxy-s10>",
+  "main": "./dist/index.cjs.js",
+  "module": "./dist/index.esm.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "./postinstall.js"
+  ],
   "scripts": {
+    "build": "node ./scripts/build.js",
+    "build:rollup": "rimraf dist && rollup -c rollup.config.ts --configPlugin @rollup/plugin-typescript",
     "changelog": "conventional-changelog -p eslint -i CHANGELOG.md -s",
     "changelog:first": "conventional-changelog -p eslint -i CHANGELOG.md -s -r 0",
+    "dev": "node ./scripts/build.js --watch",
+    "postinstall": "node ./postinstall.js",
     "lint": "eslint --config ./.eslintrc.js . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint --config ./.eslintrc.js . --ext .js,.jsx,.ts,.tsx --fix",
     "prettier": "prettier --write .",
@@ -21,19 +42,36 @@
   "dependencies": {
     "ali-oss": "^6.17.1",
     "billd-html-webpack-plugin": "^1.0.0",
-    "chalk": "^4",
+    "chalk": "^5.2.0",
     "conventional-changelog-cli": "^2.2.2",
     "esdk-obs-nodejs": "^3.21.6",
     "inquirer": "^8.2.4",
-    "node-emoji": "^1.11.0",
     "node-ssh": "^13.0.1",
+    "qiniu": "^7.8.0",
     "semver": "^7.3.7"
   },
   "devDependencies": {
+    "@babel/core": "^7.21.0",
+    "@babel/plugin-transform-runtime": "^7.21.0",
+    "@babel/preset-env": "^7.20.2",
+    "@babel/runtime-corejs3": "^7.21.0",
+    "@rollup/plugin-babel": "^6.0.3",
+    "@rollup/plugin-commonjs": "^24.0.1",
+    "@rollup/plugin-json": "^6.0.0",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-typescript": "^11.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.53.0",
+    "@typescript-eslint/parser": "^5.53.0",
     "eslint": "^8.19.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "prettier": "^2.7.1"
+    "node-emoji": "^1.11.0",
+    "prettier": "^2.7.1",
+    "rimraf": "^4.1.2",
+    "rollup": "^3.17.2",
+    "rollup-plugin-dts": "^5.2.0",
+    "rollup-plugin-esbuild": "^5.0.0",
+    "typescript": "^4.9.5"
   }
 }

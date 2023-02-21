@@ -1,4 +1,8 @@
 class ConcurrentPoll {
+  tasks: any[] = [];
+  max = 0;
+  total = 0;
+  done: any;
   constructor({ max = 5, done }) {
     this.tasks = []; // 任务队列
     this.max = max; // 最大并发数
@@ -48,4 +52,4 @@ class ConcurrentPoll {
   }
 }
 
-module.exports = ConcurrentPoll;
+export default ConcurrentPoll;

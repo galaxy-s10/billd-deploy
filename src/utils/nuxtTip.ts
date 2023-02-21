@@ -1,9 +1,10 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
-const { chalkWARN } = require('./chalkTip');
+import { chalkWARN } from './chalkTip';
+import { BilldDeploy } from '../interface';
 
-module.exports.handleNuxtTip = (data = { env: 'prod', config: {} }) => {
+export const handleNuxtTip = (data: BilldDeploy) => {
   const nuxtConfigFile = [
     fs.existsSync(path.resolve(process.cwd(), 'nuxt.config.ts')),
     fs.existsSync(path.resolve(process.cwd(), 'nuxt.config.js')),

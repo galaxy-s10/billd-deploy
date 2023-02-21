@@ -22,6 +22,8 @@
 <a href="https://www.npmjs.com/package/billd-deploy"><img src="https://img.shields.io/npm/l/billd-deploy.svg" alt="License"></a>
 </div>
 
+# 简介
+
 该插件主要帮你把本地项目部署到线上，做了以下事情：
 
 - 根据你传入的 env，判断

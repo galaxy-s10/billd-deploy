@@ -1,11 +1,12 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
-const { NodeSSH } = require('node-ssh');
+import { NodeSSH } from 'node-ssh';
 
-const { chalkSUCCESS, chalkERROR } = require('./utils/chalkTip');
+import { BilldDeploy } from './interface';
+import { chalkSUCCESS, chalkERROR } from './utils/chalkTip';
 
-async function main(data = { env: 'prod', config: {} }) {
+export const handleSSH = async function (data: BilldDeploy) {
   const { sshFileConfig, sshConfig } = data.config;
   const serverConfig = sshFileConfig(data);
   const ssh = new NodeSSH();
@@ -81,6 +82,4 @@ async function main(data = { env: 'prod', config: {} }) {
   // 关闭ssh
   ssh.dispose();
   console.log(chalkSUCCESS(`关闭${data.config.sshConfig.host}的ssh`));
-}
-
-module.exports.handleSSH = main;
+};
