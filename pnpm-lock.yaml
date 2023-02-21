@@ -2,7 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   ali-oss: ^6.17.1
-  billd-html-webpack-plugin: ^0.0.28
+  billd-html-webpack-plugin: ^1.0.0
   chalk: ^4
   conventional-changelog-cli: ^2.2.2
   esdk-obs-nodejs: ^3.21.6
@@ -18,7 +18,7 @@ specifiers:
 
 dependencies:
   ali-oss: 6.17.1
-  billd-html-webpack-plugin: 0.0.28
+  billd-html-webpack-plugin: 1.0.0
   chalk: 4.1.2
   conventional-changelog-cli: 2.2.2
   esdk-obs-nodejs: 3.21.6
@@ -722,8 +722,8 @@ packages:
       tweetnacl: 0.14.5
     dev: false
 
-  /billd-html-webpack-plugin/0.0.28:
-    resolution: {integrity: sha512-o6VfzjKq+BeZisLlj7zIq6y2ubxADtA+is+MSEoWNJuf/oNURS6k1ldI0CFNz15I8b5cQjHWUdUcbVkBptsPFw==}
+  /billd-html-webpack-plugin/1.0.0:
+    resolution: {integrity: sha512-JbYQ5qKtZlXPSQKxmjhvB668aVGKo7QINfvUeN9m5e57PrtKX/fcuRpYyIPExwymVEMOOLWKEk3OQ1R8tQzE8Q==}
     requiresBuild: true
     dependencies:
       vite: 4.1.1
