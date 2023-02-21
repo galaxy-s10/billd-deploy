@@ -1,8 +1,26 @@
-# 简介
+<p align="center">
+  <a href="">
+    <img
+      width="200"
+      src="https://resource.hsslive.cn/image/1613141138717Billd.webp"
+      alt="billd-deploy logo"
+    />
+  </a>
+</p>
 
-| 包名                                                           | 版本                                                                                                |
-| -------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| [ldcloud-deploy](https://www.npmjs.com/package/ldcloud-deploy) | [![npm](https://img.shields.io/npm/v/ldcloud-deploy)](https://www.npmjs.com/package/ldcloud-deploy) |
+<h1 align="center">
+  billd-deploy
+</h1>
+
+<p align="center">
+部署脚本，支持阿里云oss、华为云obs
+</p>
+
+<div align="center">
+<a href="https://www.npmjs.com/package/billd-deploy"><img src="https://img.shields.io/npm/v/billd-deploy.svg" alt="Version"></a>
+<a href="https://www.npmjs.com/package/billd-deploy"><img src="https://img.shields.io/npm/dw/billd-deploy.svg" alt="Downloads"></a>
+<a href="https://www.npmjs.com/package/billd-deploy"><img src="https://img.shields.io/npm/l/billd-deploy.svg" alt="License"></a>
+</div>
 
 该插件主要帮你把本地项目部署到线上，做了以下事情：
 
@@ -36,16 +54,8 @@
 
 # 安装
 
-1.设置仓库
-
 ```sh
-npm config set registry=https://packages.aliyun.com/5f05a0346207a1a8b17f4aaf/npm/npm-registry/
-```
-
-2.安装
-
-```sh
-npm i ldcloud-deploy
+npm i billd-deploy
 ```
 
 # 最佳实践
@@ -72,10 +82,10 @@ npm i ldcloud-deploy
 
 在你的项目新增：deploy/index.js：
 
-> 目前 ldcloud-deploy 只支持通过 require 导入（node 环境），不能使用 import 导入
+> 目前 billd-deploy 只支持通过 require 导入（node 环境），不能使用 import 导入
 
 ```js
-const { deploy } = require('ldcloud-deploy');
+const { deploy } = require('billd-deploy');
 
 const env = process.argv.includes('--prod') ? 'prod' : 'beta';
 
@@ -204,10 +214,10 @@ npm run deploy:prod
 
 在你的项目新增：deploy/index.js：
 
-> 目前 ldcloud-deploy 只支持通过 require 导入（node 环境），不能使用 import 导入
+> 目前 billd-deploy 只支持通过 require 导入（node 环境），不能使用 import 导入
 
 ```js
-const { deploy } = require('ldcloud-deploy');
+const { deploy } = require('billd-deploy');
 
 const env = process.argv.includes('--prod') ? 'prod' : 'beta';
 
@@ -313,16 +323,3 @@ npm run deploy:prod
 ## 其他项目
 
 以此类推
-
-# 应用项目
-
-- cloudphone_ldcloud_browser
-- cloudphone_ldcloud_baike
-- cloudphone_ldcloud_community
-- cloudphone_ldcloud_web_os
-- cloudphone_ldcloud_web_cs
-- cloudphone_ldcloud_new_cp
-- cloudphone_ldcloud_web_app
-- cloudphone_xiaodiyun_web_cp
-- cloudphone_xiaodiyun_web_app
-- cloudphone_frontend_api
