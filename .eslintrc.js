@@ -41,7 +41,7 @@ module.exports = {
     'no-console': 0, // 此规则不允许调用console对象的方法。
     'spaced-comment': ['error', 'always', { exceptions: ['-', '+'] }], // 该规则强制注释中 // 或 /* 后空格的一致性
     'no-var': 2, // 要求let或const代替var
-    'no-shadow': 2, // 禁止变量声明与外层作用域的变量同名
+    // 'no-shadow': 2, // 禁止变量声明与外层作用域的变量同名
     'no-param-reassign': 2, // 禁止对 function 的参数进行重新赋值
     'no-nested-ternary': 2, // 禁止嵌套三元
     'no-plusplus': 2, // 禁用一元操作符 ++ 和 --
@@ -152,5 +152,7 @@ module.exports = {
     '@typescript-eslint/restrict-plus-operands': 0, // 要求加法的两个操作数是相同的类型并且是bigint, number, 或string。即const a = '1';console.log(a + 1);会报错
     'no-unused-vars': 0, // 禁止出现未使用过的变量
     '@typescript-eslint/no-unused-vars': 'error', // https://typescript-eslint.io/rules/no-unused-vars/
+    'no-shadow': 0, // 禁止变量声明与外层作用域的变量同名
+    '@typescript-eslint/no-shadow': 'error', // https://typescript-eslint.io/rules/no-shadow/
   },
 };

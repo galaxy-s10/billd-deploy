@@ -1,39 +1,50 @@
 import { handleBuild } from './build';
 import { handleAliOssCDN } from './cdn/ali-oss';
 import { handleHuaweiObsCDN } from './cdn/huawei-obs';
-import { BilldDeploy } from './interface';
+import { BilldDeploy, EnvEnum, CdnEnum } from './interface';
 import { handleSSH } from './ssh';
 import { chalkSUCCESS, chalkERROR } from './utils/chalkTip';
 import { generateDeployFile, deleteDeployFile } from './utils/git';
-import { handleNuxtTip } from './utils/nuxtTip';
+import { handlePm2Tip } from './utils/pm2Tip';
 
-export const deploy = async function ({ env, config }: BilldDeploy) {
+export * from './interface';
+
+export const deploy = async function (data: BilldDeploy) {
+  const { env, config } = data;
   if (!config || !env) {
     console.log(chalkERROR('缺少env或config！'));
     return;
   }
-  if (!['prod', 'beta'].includes(env)) {
-    console.log(chalkERROR(`env错误,env必须是: "prod"或"beta"`));
+
+  const allowEnv = Object.keys(EnvEnum);
+  if (!allowEnv.includes(env)) {
+    console.log(chalkERROR(`env错误, env必须是: ${allowEnv.toString()}之一`));
     return;
   }
-  if (!['huawei', 'ali', 'none'].includes(config.use)) {
+
+  const allowCdn = Object.keys(CdnEnum);
+  if (!allowCdn.includes(config.cdn(data))) {
     console.log(
-      chalkERROR(`config.use错误,config.use必须是"huawei"或"ali"或"none"`)
+      chalkERROR(`config.cdn错误, config.cdn必须是: ${allowCdn.toString()}之一`)
     );
     return;
   }
+
   try {
-    await handleBuild({ env, config });
+    await handleBuild(data);
     generateDeployFile();
-    await handleSSH({ env, config });
-    if (config.use === 'huawei') {
-      await handleHuaweiObsCDN({ env, config });
-    } else if (config.use === 'ali') {
-      await handleAliOssCDN({ env, config });
+    await handleSSH(data);
+    switch (config.cdn(data)) {
+      case CdnEnum.huawei:
+        await handleHuaweiObsCDN(data);
+        break;
+      case CdnEnum.ali:
+        await handleAliOssCDN(data);
+        break;
     }
     deleteDeployFile();
     console.log(chalkSUCCESS(`构建${env}成功`));
-    handleNuxtTip({ env, config });
+    handlePm2Tip(data);
   } catch (error) {
     console.log(chalkERROR(`构建${env}出错`), error);
   }

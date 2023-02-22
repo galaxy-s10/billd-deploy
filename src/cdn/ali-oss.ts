@@ -8,10 +8,15 @@ import { chalkERROR, chalkSUCCESS, chalkINFO } from '../utils/chalkTip';
 import Queue from '../utils/queue';
 
 export const handleAliOssCDN = function (data: BilldDeploy) {
-  const { aliOssConfig, aliOssFileConfig } = data.config;
+  const { aliOssConfig: cdnConfig, aliOssFileConfig: cdnFileConfig } =
+    data.config;
+  if (!cdnConfig || !cdnFileConfig) return;
+
+  const aliOssConfig = cdnConfig(data);
+  const aliOssFileConfig = cdnFileConfig(data);
 
   function findFile(inputDir) {
-    const res = [];
+    const res: string[] = [];
     function loop(dirArr) {
       for (let i = 0; i < dirArr.length; i += 1) {
         const file = dirArr[i];
@@ -26,7 +31,7 @@ export const handleAliOssCDN = function (data: BilldDeploy) {
       }
     }
 
-    let inputDirArr = [];
+    let inputDirArr: string[] = [];
 
     try {
       inputDirArr = fs.readdirSync(inputDir);
@@ -45,9 +50,7 @@ export const handleAliOssCDN = function (data: BilldDeploy) {
   try {
     const uploadOkRecord = new Map(); // 上传成功记录
     const uploadErrRecord = new Map(); // 上传失败记录
-    const allFile = []; // 所有需要上传的文件
-
-    const fileConfig = aliOssFileConfig(data);
+    const allFile: string[] = []; // 所有需要上传的文件
 
     const client = new OSS({
       // yourregion填写Bucket所在地域。以华东1（杭州）为例，Region填写为oss-cn-hangzhou。
@@ -61,11 +64,11 @@ export const handleAliOssCDN = function (data: BilldDeploy) {
       prefix: aliOssConfig.prefix,
     });
 
-    // 添加fileConfig目录
-    allFile.push(...findFile(fileConfig.dir.local));
+    // 添加aliOssFileConfig目录
+    allFile.push(...findFile(aliOssFileConfig.dir.local));
 
-    fileConfig.file.local.forEach((item) => {
-      // 添加fileConfig的文件
+    aliOssFileConfig.file.local.forEach((item) => {
+      // 添加aliOssFileConfig的文件
       allFile.push(item);
     });
 
@@ -119,10 +122,12 @@ export const handleAliOssCDN = function (data: BilldDeploy) {
 
     return new Promise((resolve) => {
       // 这里需要限制并发数
-      const uploadQueue = new Queue({ max: 5, done: () => resolve() });
-
+      const uploadQueue = new Queue({
+        max: 5,
+        done: () => resolve('all done~'),
+      });
       allFile.forEach((filePath) => {
-        if (fileConfig.file.local.includes(filePath)) {
+        if (aliOssFileConfig.file.local.includes(filePath)) {
           const filename = filePath.split(path.sep).pop();
           const ossFlieName = path.join(aliOssConfig.prefix, filename);
           uploadQueue.addTask(() =>
@@ -132,10 +137,10 @@ export const handleAliOssCDN = function (data: BilldDeploy) {
             )
           );
         } else {
-          const dirName = fileConfig.dir.local.split(path.sep).pop();
+          const dirName = aliOssFileConfig.dir.local.split(path.sep).pop();
           const ossFlieName =
             aliOssConfig.prefix +
-            filePath.replace(fileConfig.dir.local, path.sep + dirName);
+            filePath.replace(aliOssFileConfig.dir.local, path.sep + dirName);
           uploadQueue.addTask(() =>
             put(
               path.sep === '/' ? ossFlieName : ossFlieName.replace(/\\/g, '/'),

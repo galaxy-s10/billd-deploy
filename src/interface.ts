@@ -30,24 +30,39 @@ export interface IQiniuConfig {
   todo: any;
 }
 
+export enum EnvEnum {
+  prod = 'prod',
+  beta = 'beta',
+}
+
+export enum CdnEnum {
+  ali = 'ali',
+  huawei = 'huawei',
+  qiniu = 'qiniu',
+  none = 'none',
+}
+
+export type CdnType = keyof typeof CdnEnum;
+export type EnvType = keyof typeof EnvEnum;
+
 export interface IBilldDeployConfig {
-  /** 使用cdn */
-  use: 'ali' | 'huawei' | 'qiniu' | 'none';
+  /** 使用哪个cdn */
+  cdn: (data: BilldDeploy) => CdnType;
 
   /** ssh配置 */
-  sshConfig: ISSHConfig;
+  sshConfig?: (data: BilldDeploy) => ISSHConfig;
 
   /** https://help.aliyun.com/document_detail/111265.html */
-  aliOssConfig: IAliOssConfig;
+  aliOssConfig?: (data: BilldDeploy) => IAliOssConfig;
 
   /** https://support.huaweicloud.com/sdk-nodejs-devg-obs/obs_29_0404.html */
-  huaweiObsConfig: IHuaweiObsConfig;
+  huaweiObsConfig?: (data: BilldDeploy) => IHuaweiObsConfig;
 
   /** 七牛云配置 */
-  qiniuConfig: IQiniuConfig;
+  qiniuConfig?: (data: BilldDeploy) => IQiniuConfig;
 
   /** 上传到ssh的文件、目录 */
-  sshFileConfig: (data: BilldDeploy) => {
+  sshFileConfig?: (data: BilldDeploy) => {
     dir: {
       local: string;
       remote: string;
@@ -59,7 +74,7 @@ export interface IBilldDeployConfig {
   };
 
   /** 上传到阿里云oss的文件、目录 */
-  aliOssFileConfig: (data: BilldDeploy) => {
+  aliOssFileConfig?: (data: BilldDeploy) => {
     dir: {
       local: string;
     };
@@ -69,7 +84,7 @@ export interface IBilldDeployConfig {
   };
 
   /** 上传到华为云obs的文件、目录 */
-  huaweiObsFileConfig: (data: BilldDeploy) => {
+  huaweiObsFileConfig?: (data: BilldDeploy) => {
     dir: {
       local: string;
     };
@@ -79,7 +94,7 @@ export interface IBilldDeployConfig {
   };
 
   /** 上传到七牛云的文件、目录 */
-  qiniuFileConfig: (data: BilldDeploy) => {
+  qiniuFileConfig?: (data: BilldDeploy) => {
     dir: {
       local: string;
     };
@@ -90,6 +105,6 @@ export interface IBilldDeployConfig {
 }
 
 export interface BilldDeploy {
-  env: 'prod' | 'beta';
+  env: EnvType;
   config: IBilldDeployConfig;
 }
