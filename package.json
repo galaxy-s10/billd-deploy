@@ -42,7 +42,7 @@
   "dependencies": {
     "ali-oss": "^6.17.1",
     "billd-html-webpack-plugin": "^1.0.0",
-    "chalk": "^5.2.0",
+    "chalk": "^4",
     "conventional-changelog-cli": "^2.2.2",
     "esdk-obs-nodejs": "^3.21.6",
     "inquirer": "^8.2.4",
