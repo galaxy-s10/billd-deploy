@@ -1,3 +1,12 @@
+## [1.0.4](https://github.com/galaxy-s10/billd-deploy/compare/v1.0.3...v1.0.4) (2023-02-22)
+
+
+### feat
+
+* 统一配置 ([0195171](https://github.com/galaxy-s10/billd-deploy/commit/0195171ac9799c19151086b6b73852213182d4ec))
+
+
+
 ## [1.0.3](https://github.com/galaxy-s10/billd-deploy/compare/v1.0.2...v1.0.3) (2023-02-22)
 
 
