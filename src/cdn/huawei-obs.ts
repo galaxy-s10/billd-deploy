@@ -9,6 +9,7 @@ import Queue from '../utils/queue';
 
 export const handleHuaweiObsCDN = function (data: BilldDeploy) {
   const { huaweiObsConfig, huaweiObsFileConfig } = data.config;
+  const { bucket: obsBucket, prefix: obsPrefix } = huaweiObsConfig;
 
   function findFile(inputDir) {
     const res = [];
@@ -125,13 +126,10 @@ export const handleHuaweiObsCDN = function (data: BilldDeploy) {
       allFile.forEach((filePath) => {
         if (fileConfig.file.local.includes(filePath)) {
           const filename = filePath.split(path.sep).pop();
-          const obsFlieName = path.join(
-            fileConfig.file.remote.obsPrefix,
-            filename
-          );
+          const obsFlieName = path.join(obsPrefix, filename);
           uploadQueue.addTask(() =>
             put(
-              fileConfig.file.remote.obsBucket,
+              obsBucket,
               path.sep === '/' ? obsFlieName : obsFlieName.replace(/\\/g, '/'),
               filePath
             )
@@ -139,11 +137,11 @@ export const handleHuaweiObsCDN = function (data: BilldDeploy) {
         } else {
           const dirName = fileConfig.dir.local.split(path.sep).pop();
           const obsFlieName =
-            fileConfig.dir.remote.obsPrefix +
+            obsPrefix +
             filePath.replace(fileConfig.dir.local, path.sep + dirName);
           uploadQueue.addTask(() =>
             put(
-              fileConfig.file.remote.obsBucket,
+              obsBucket,
               path.sep === '/' ? obsFlieName : obsFlieName.replace(/\\/g, '/'),
               filePath
             )
