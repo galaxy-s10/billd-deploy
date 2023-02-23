@@ -60,6 +60,7 @@ const myconfig = {
     sshConfig: (data) => {},
     // 这个data就是你传入deploy的配置，即myconfig
     sshFileConfig: (data) => {},
+    // 这个data就是你传入deploy的配置，即myconfig
     huaweiObsConfig: (data) => {},
     // 这个data就是你传入deploy的配置，即myconfig
     huaweiObsFileConfig: (data) => {},
@@ -90,6 +91,7 @@ const myconfig = {
     sshConfig: (data) => {},
     // 这个data就是你传入deploy的配置，即myconfig
     sshFileConfig: (data) => {},
+    // 这个data就是你传入deploy的配置，即myconfig
     huaweiObsConfig: (data) => {},
     // 这个data就是你传入deploy的配置，即myconfig
     huaweiObsFileConfig: (data) => {},
@@ -122,6 +124,7 @@ config 里面的所有配置项都需要返回特定的配置，具体请看：
     sshConfig: (data) => {},
     // 这个data就是你传入deploy的配置，即myconfig
     sshFileConfig: (data) => {},
+    // 这个data就是你传入deploy的配置，即myconfig
     huaweiObsConfig: (data) => {},
     // 这个data就是你传入deploy的配置，即myconfig
     huaweiObsFileConfig: (data) => {},
