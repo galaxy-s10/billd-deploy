@@ -27,7 +27,12 @@ export interface IHuaweiObsConfig {
 }
 
 export interface IQiniuConfig {
-  todo: any;
+  accessKey: string;
+  secretKey: string;
+  bucket: string;
+  prefix: string;
+  /** https://developer.qiniu.com/kodo/1289/nodejs#general-uptoken，qiniu.zone.Zone_z2代表华南 */
+  zone: string;
 }
 
 export enum EnvEnum {

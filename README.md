@@ -13,7 +13,7 @@
 </h1>
 
 <p align="center">
-部署脚本，支持阿里云oss、华为云obs
+部署脚本，支持阿里云oss、华为云obs、七牛云
 </p>
 
 <div align="center">
@@ -32,27 +32,11 @@
 - 根据你传入的 env，执行 `npm run build:beta` 或 `npm run build:prod`（此时应该输出静态资源目录）。
 - 在你的项目根目录生成一个临时的 deploy.json 文件，它记录了此时的 git 信息、pkg 信息、构建时间。
 - 根据你的 ssh 配置，将你配置的文件目录和文件（此时应该配置输出的静态资源目录和 deploy.json 文件）上传到服务器。
-- 根据你的 cdn 配置，将你配置的文件目录和文件（此时应该配置输出的静态资源目录和 deploy.json 文件）上传到阿里云 oss 或者华为云 obs（允许配置不使用 cdn）
+- 根据你的 cdn 配置，将你配置的文件目录和文件（此时应该配置输出的静态资源目录和 deploy.json 文件）上传到阿里云 oss / 华为云 obs / 七牛云，也可以配置不使用 cdn
 - 删除临时的 deploy.json 文件
-- 检测是否是 nuxt 项目，如果是的话则显示提示（进入服务器重新安装依赖、重启 pm2）
+- 检测是否是 node 项目（ecosystem.config.js），如果是的话则显示提示（进入服务器重新安装依赖、重启 pm2）
 
 > ssh 和 cdn 操作都是执行的 put 操作，不会删除文件
-
-## 注意
-
-从简介可以看出，你的 package.json 必须得存在以下脚本：
-
-```json
-{
-  // ...
-  "scripts": {
-    // ...
-    "build:beta": "",
-    "build:prod": "",
-    "release": ""
-  }
-}
-```
 
 # 安装
 
@@ -60,11 +44,102 @@
 npm i billd-deploy
 ```
 
-# 最佳实践
+# 使用
 
-## nuxt2 项目
+## esm 方式引入
 
-### 配置
+```js
+import { deploy } from 'billd-deploy';
+
+const myconfig = {
+  env: 'beta', // 要求是'prod'或'beta'
+  config: {
+    // 这个data就是你传入deploy的配置，即myconfig
+    cdn: (data) => (data.env === 'beta' ? 'none' : 'huawei'), // 要求返回'huawei'或'ali'或'qiniu'或'none'
+    // 这个data就是你传入deploy的配置，即myconfig
+    sshConfig: (data) => {},
+    // 这个data就是你传入deploy的配置，即myconfig
+    sshFileConfig: (data) => {},
+    huaweiObsConfig: (data) => {},
+    // 这个data就是你传入deploy的配置，即myconfig
+    huaweiObsFileConfig: (data) => {},
+    // 这个data就是你传入deploy的配置，即myconfig
+    aliOssConfig: (data) => {},
+    // 这个data就是你传入deploy的配置，即myconfig
+    aliOssFileConfig: (data) => {},
+    // 这个data就是你传入deploy的配置，即myconfig
+    qiniuConfig: (data) => {},
+    // 这个data就是你传入deploy的配置，即myconfig
+    qiniuFileConfig: (data) => {},
+  },
+};
+deploy(myconfig);
+```
+
+## commonjs 方式引入
+
+```js
+const { deploy } = require('billd-deploy');
+
+const myconfig = {
+  env: 'beta', // 要求是'prod'或'beta'
+  config: {
+    // 这个data就是你传入deploy的配置，即myconfig
+    cdn: (data) => (data.env === 'beta' ? 'none' : 'huawei'), // 要求返回'huawei'或'ali'或'qiniu'或'none'
+    // 这个data就是你传入deploy的配置，即myconfig
+    sshConfig: (data) => {},
+    // 这个data就是你传入deploy的配置，即myconfig
+    sshFileConfig: (data) => {},
+    huaweiObsConfig: (data) => {},
+    // 这个data就是你传入deploy的配置，即myconfig
+    huaweiObsFileConfig: (data) => {},
+    // 这个data就是你传入deploy的配置，即myconfig
+    aliOssConfig: (data) => {},
+    // 这个data就是你传入deploy的配置，即myconfig
+    aliOssFileConfig: (data) => {},
+    // 这个data就是你传入deploy的配置，即myconfig
+    qiniuConfig: (data) => {},
+    // 这个data就是你传入deploy的配置，即myconfig
+    qiniuFileConfig: (data) => {},
+  },
+};
+deploy(myconfig);
+```
+
+# 配置项
+
+config 里面的所有配置项都需要返回特定的配置，具体请看：
+
+[https://github.com/galaxy-s10/billd-deploy/blob/master/src/interface.ts](https://github.com/galaxy-s10/billd-deploy/blob/master/src/interface.ts)
+
+```js
+{
+  env: 'beta', // 要求是'prod'或'beta'
+  config: {
+    // 这个data就是你传入deploy的配置，即myconfig
+    cdn: (data) => (data.env === 'beta' ? 'none' : 'huawei'), // 要求返回'huawei'或'ali'或'qiniu'或'none'
+    // 这个data就是你传入deploy的配置，即myconfig
+    sshConfig: (data) => {},
+    // 这个data就是你传入deploy的配置，即myconfig
+    sshFileConfig: (data) => {},
+    huaweiObsConfig: (data) => {},
+    // 这个data就是你传入deploy的配置，即myconfig
+    huaweiObsFileConfig: (data) => {},
+    // 这个data就是你传入deploy的配置，即myconfig
+    aliOssConfig: (data) => {},
+    // 这个data就是你传入deploy的配置，即myconfig
+    aliOssFileConfig: (data) => {},
+    // 这个data就是你传入deploy的配置，即myconfig
+    qiniuConfig: (data) => {},
+    // 这个data就是你传入deploy的配置，即myconfig
+    qiniuFileConfig: (data) => {},
+  },
+}
+```
+
+# 案例
+
+## 配置
 
 在你的项目的 package.json 新增：
 
@@ -84,209 +159,26 @@ npm i billd-deploy
 
 在你的项目新增：deploy/index.js：
 
-> 目前 billd-deploy 只支持通过 require 导入（node 环境），不能使用 import 导入
-
 ```js
+const path = require('path');
+
 const { deploy } = require('billd-deploy');
 
 const env = process.argv.includes('--prod') ? 'prod' : 'beta';
 
 deploy({
-  env, //只能是：prod或beta
+  env,
   config: {
-    use: 'huawei', //只能是：huawei/ali/none，当huawei时，使用huawei的cdn配置；当ali时，使用ali的cdn配置；当是none时，不使用cdn
-    huaweiObsConfig: {
-      access_key_id: 'xxxxx',
-      secret_access_key: 'xxxxx',
-      server: 'xxxxx',
-    },
-    // 这个data就是你传入deploy的参数，这里你可以拿到它
-    huaweiObsFileConfig: (data) => {
+    cdn: (data) => (data.env === 'beta' ? 'none' : 'huawei'),
+
+    sshConfig: () => {
       return {
-        // 将本地的目录上传到cdn目录（包括这个目录）
-        dir: {
-          local: path.resolve(__dirname, '../dist/dist/client'),
-          remote: {
-            obsBucket: 'ldres',
-            obsPrefix: 'ldq_website/xiaodiyun-web-cp', // obsPrefix的最前面不能带/
-          },
-        },
-        // 将本地的文件上传到cdn目录（注意不要将敏感信息上传到cdn！！！）
-        file: {
-          local: [
-            path.resolve(__dirname, '../deploy.json'),
-            path.resolve(__dirname, '../src/static/favicon.ico'),
-          ],
-          remote: {
-            obsBucket: 'ldres',
-            obsPrefix: 'ldq_website/xiaodiyun-web-cp', // obsPrefix的最前面不能带/
-          },
-        },
-      };
-    },
-    aliOssConfig: {
-      // yourregion填写Bucket所在地域。以华东1（杭州）为例，Region填写为oss-cn-hangzhou。
-      region: 'xxxxx',
-      // 阿里云账号AccessKey拥有所有API的访问权限，风险很高。强烈建议您创建并使用RAM用户进行API访问或日常运维，请登录RAM控制台创建RAM用户。
-      accessKeyId: 'xxxxx',
-      accessKeySecret: 'xxxxx',
-      bucket: 'xxxxx',
-      prefix: 'xxxxx',
-    },
-    // 这个data就是你传入deploy的参数，这里你可以拿到它
-    aliOssFileConfig: (data) => {
-      return {
-        // 将本地的目录上传到cdn目录（包括这个目录）
-        dir: {
-          local: path.resolve(__dirname, '../dist/dist/client'),
-        },
-        // 将本地的文件上传到cdn目录（注意不要将敏感信息上传到cdn！！！）
-        file: {
-          local: [
-            path.resolve(__dirname, '../deploy.json'),
-            path.resolve(__dirname, '../src/static/favicon.ico'),
-          ],
-        },
+        host: 'xxxx',
+        username: 'xxxx',
+        password: 'xxxxx',
       };
     },
 
-    sshConfig: {
-      host: 'xxxxx',
-      username: 'xxxxx',
-      password: 'xxxxx',
-    },
-    // 这个data就是你传入deploy的参数，这里你可以拿到它
-    sshFileConfig: (data) => {
-      return {
-        // 将本地的目录上传到服务端目录
-        dir: {
-          local: path.resolve(__dirname, '../dist'),
-          remote: '/data/apps/html/xdyun/xiaodiyun-web-cp',
-        },
-        // 将本地的文件上传到服务端目录
-        file: {
-          local: [
-            path.resolve(__dirname, '../package.json'),
-            path.resolve(__dirname, '../package-lock.json'),
-            path.resolve(__dirname, '../nuxt.config.js'),
-            path.resolve(__dirname, '../ecosystem.config.js'),
-            path.resolve(__dirname, '../.npmrc'),
-            path.resolve(__dirname, '../README.md'),
-            path.resolve(__dirname, '../deploy.json'),
-          ],
-          remote: '/data/apps/html/xdyun/xiaodiyun-web-cp',
-        },
-      };
-    },
-  },
-});
-```
-
-### 部署测试环境
-
-```sh
-npm run deploy:beta
-```
-
-### 部署正式环境
-
-```sh
-npm run deploy:prod
-```
-
-## vuecli 项目
-
-### 配置
-
-在你的项目的 package.json 新增：
-
-```json
-{
-  // ...
-  "scripts": {
-    // ...
-    "build:beta": "vue-cli-service build",
-    "build:prod": "vue-cli-service build",
-    "deploy:beta": "node ./deploy/index.js --beta",
-    "deploy:prod": "node ./deploy/index.js --prod",
-    "release": ""
-  }
-}
-```
-
-在你的项目新增：deploy/index.js：
-
-> 目前 billd-deploy 只支持通过 require 导入（node 环境），不能使用 import 导入
-
-```js
-const { deploy } = require('billd-deploy');
-
-const env = process.argv.includes('--prod') ? 'prod' : 'beta';
-
-deploy({
-  env, //只能是：prod或beta
-  config: {
-    use: 'huawei', //只能是：huawei/ali/none，当huawei时，使用huawei的cdn配置；当ali时，使用ali的cdn配置；当是none时，不使用cdn
-    huaweiObsConfig: {
-      access_key_id: 'xxxxx',
-      secret_access_key: 'xxxxx',
-      server: 'xxxxx',
-    },
-    // 这个data就是你传入deploy的参数，这里你可以拿到它
-    huaweiObsFileConfig: (data) => {
-      const outDir = data.env === 'prod' ? 'h5' : 'h5beta';
-      return {
-        // 将本地的目录上传到cdn目录（包括这个目录）
-        dir: {
-          local: path.resolve(__dirname, `../${outDir}`),
-          remote: {
-            obsBucket: 'ldres',
-            obsPrefix: `ldq_website/xdyun-web-app-${outDir}`, // obsPrefix的最前面不能带/
-          },
-        },
-        // 将本地的文件上传到cdn目录（注意不要将敏感信息上传到cdn！！！）
-        file: {
-          local: [path.resolve(__dirname, '../deploy.json')],
-          remote: {
-            obsBucket: 'ldres',
-            obsPrefix: `ldq_website/xdyun-web-app-${outDir}`, // obsPrefix的最前面不能带/
-          },
-        },
-      };
-    },
-
-    aliOssConfig: {
-      // yourregion填写Bucket所在地域。以华东1（杭州）为例，Region填写为oss-cn-hangzhou。
-      region: 'xxxxx',
-      // 阿里云账号AccessKey拥有所有API的访问权限，风险很高。强烈建议您创建并使用RAM用户进行API访问或日常运维，请登录RAM控制台创建RAM用户。
-      accessKeyId: 'xxxxx',
-      accessKeySecret: 'xxxxx',
-      bucket: 'xxxxx',
-      prefix: 'xxxxx',
-    },
-    // 这个data就是你传入deploy的参数，这里你可以拿到它
-    aliOssFileConfig: (data) => {
-      return {
-        // 将本地的目录上传到cdn目录（包括这个目录）
-        dir: {
-          local: path.resolve(__dirname, '../dist/dist/client'),
-        },
-        // 将本地的文件上传到cdn目录（注意不要将敏感信息上传到cdn！！！）
-        file: {
-          local: [
-            path.resolve(__dirname, '../deploy.json'),
-            path.resolve(__dirname, '../src/static/favicon.ico'),
-          ],
-        },
-      };
-    },
-
-    sshConfig: {
-      host: 'xxxxx',
-      username: 'xxxxx',
-      password: 'xxxxx',
-    },
-    // 这个data就是你传入deploy的参数，这里你可以拿到它
     sshFileConfig: (data) => {
       const outDir = data.env === 'prod' ? 'h5' : 'h5beta';
       return {
@@ -306,22 +198,63 @@ deploy({
         },
       };
     },
+
+    huaweiObsConfig: (data) => {
+      const outDir = data.env === 'prod' ? 'h5' : 'h5beta';
+      return {
+        access_key_id: 'xxxxx',
+        secret_access_key: 'xxxxx',
+        server: 'obs.cn-east-3.myhuaweicloud.com', // 华为obs browser+客户端里面，桶列表，找到对应的桶，看旁边的操作栏里面基本信息，找到Endpoint
+        bucket: 'ldres',
+        prefix: `ldq_website/xdyun-web-app-${outDir}`, // obsPrefix的最前面不能带/
+      };
+    },
+
+    huaweiObsFileConfig: (data) => {
+      const outDir = data.env === 'prod' ? 'h5' : 'h5beta';
+      return {
+        // 将本地的目录上传到cdn目录（包括这个目录）
+        dir: {
+          local: path.resolve(__dirname, `../${outDir}`),
+        },
+        // 将本地的文件上传到cdn目录（注意不要将敏感信息上传到cdn！！！）
+        file: {
+          local: [path.resolve(__dirname, '../deploy.json')],
+        },
+      };
+    },
   },
 });
 ```
 
-### 部署测试环境
+## 部署测试环境
 
 ```sh
 npm run deploy:beta
 ```
 
-### 部署正式环境
+## 部署正式环境
 
 ```sh
 npm run deploy:prod
 ```
 
-## 其他项目
+# 注意
 
-以此类推
+从简介可以看出，你的 package.json 必须得存在以下脚本：
+
+```json
+{
+  // ...
+  "scripts": {
+    // ...
+    "build:beta": "",
+    "build:prod": "",
+    "release": ""
+  }
+}
+```
+
+# 源码
+
+github：[https://github.com/galaxy-s10/billd-deploy](https://github.com/galaxy-s10/billd-deploy)，欢迎 star or fork！

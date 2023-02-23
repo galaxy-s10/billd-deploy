@@ -1,6 +1,7 @@
 import { handleBuild } from './build';
 import { handleAliOssCDN } from './cdn/ali-oss';
 import { handleHuaweiObsCDN } from './cdn/huawei-obs';
+import { handleQiniuCDN } from './cdn/qiniu';
 import { BilldDeploy, EnvEnum, CdnEnum } from './interface';
 import { handleSSH } from './ssh';
 import { chalkSUCCESS, chalkERROR } from './utils/chalkTip';
@@ -40,6 +41,9 @@ export const deploy = async function (data: BilldDeploy) {
         break;
       case CdnEnum.ali:
         await handleAliOssCDN(data);
+        break;
+      case CdnEnum.qiniu:
+        await handleQiniuCDN(data);
         break;
     }
     deleteDeployFile();

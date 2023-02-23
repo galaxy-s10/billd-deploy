@@ -42,8 +42,6 @@
   "dependencies": {
     "ali-oss": "^6.17.1",
     "billd-html-webpack-plugin": "^1.0.0",
-    "chalk": "^4",
-    "conventional-changelog-cli": "^2.2.2",
     "esdk-obs-nodejs": "^3.21.6",
     "inquirer": "^8.2.4",
     "node-ssh": "^13.0.1",
@@ -62,6 +60,8 @@
     "@rollup/plugin-typescript": "^11.0.0",
     "@typescript-eslint/eslint-plugin": "^5.53.0",
     "@typescript-eslint/parser": "^5.53.0",
+    "chalk": "^4",
+    "conventional-changelog-cli": "^2.2.2",
     "eslint": "^8.19.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.26.0",
