@@ -1,3 +1,12 @@
+## [1.0.6](https://github.com/galaxy-s10/billd-deploy/compare/v1.0.5...v1.0.6) (2023-02-23)
+
+
+### feat
+
+* 增加七牛云 ([1c64871](https://github.com/galaxy-s10/billd-deploy/commit/1c648710d519cb3985dcd0f59f47fd701442f7d3))
+
+
+
 ## [1.0.5](https://github.com/galaxy-s10/billd-deploy/compare/v1.0.4...v1.0.5) (2023-02-22)
 
 
