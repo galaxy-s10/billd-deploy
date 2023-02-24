@@ -115,6 +115,7 @@ export const handleQiniuCDN = function (data: BilldDeploy) {
             filePath,
             `cdn上传失败：${uploadErrRecord.size}/${allFile.length}`
           );
+          console.log(result.respErr);
         }
         const progress = uploadOkRecord.size + uploadErrRecord.size;
         if (progress === allFile.length) {

@@ -106,6 +106,7 @@ export const handleHuaweiObsCDN = function (data: BilldDeploy) {
             filePath,
             `cdn上传失败：${uploadErrRecord.size}/${allFile.length}`
           );
+          console.log(result.err);
         }
         const progress = uploadOkRecord.size + uploadErrRecord.size;
         if (progress === allFile.length) {
