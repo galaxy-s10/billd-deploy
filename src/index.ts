@@ -34,7 +34,6 @@ export const deploy = async function (data: BilldDeploy) {
   try {
     await handleBuild(data);
     generateDeployFile();
-    await handleSSH(data);
     switch (config.cdn(data)) {
       case CdnEnum.huawei:
         await handleHuaweiObsCDN(data);
@@ -46,6 +45,7 @@ export const deploy = async function (data: BilldDeploy) {
         await handleQiniuCDN(data);
         break;
     }
+    await handleSSH(data);
     deleteDeployFile();
     console.log(chalkSUCCESS(`构建${env}成功`));
     handlePm2Tip(data);
