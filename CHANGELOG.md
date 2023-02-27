@@ -1,3 +1,20 @@
+## [1.0.7](https://github.com/galaxy-s10/billd-deploy/compare/v1.0.6...v1.0.7) (2023-02-27)
+
+
+### docs
+
+* 更新readme ([ca80918](https://github.com/galaxy-s10/billd-deploy/commit/ca8091886671e40a4e3faf77dcf7da18b4f8abb2))
+
+### feat
+
+* 先cdn再服务器 ([3c315f4](https://github.com/galaxy-s10/billd-deploy/commit/3c315f45c71fd19e3b1bbaf3d43476b8691cf306))
+
+### fix
+
+* 打印错误 ([385156d](https://github.com/galaxy-s10/billd-deploy/commit/385156dfcb199514b2a5ccc135d41dd9b060eb52))
+
+
+
 ## [1.0.6](https://github.com/galaxy-s10/billd-deploy/compare/v1.0.5...v1.0.6) (2023-02-23)
 
 
