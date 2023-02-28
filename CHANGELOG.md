@@ -1,3 +1,12 @@
+## [1.0.8](https://github.com/galaxy-s10/billd-deploy/compare/v1.0.7...v1.0.8) (2023-02-28)
+
+
+### fix
+
+* release脚本 ([89535b6](https://github.com/galaxy-s10/billd-deploy/commit/89535b615dc6e8e2fdf4628889706b224de159b4))
+
+
+
 ## [1.0.7](https://github.com/galaxy-s10/billd-deploy/compare/v1.0.6...v1.0.7) (2023-02-27)
 
 
