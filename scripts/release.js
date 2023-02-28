@@ -56,6 +56,9 @@ const selectReleaseVersion = async () => {
       JSON.stringify({ ...pkg, version: targetVersion }, {}, 2)
     );
 
+    // pnpm run build
+    execSync(`pnpm run build`, { stdio: 'inherit' });
+
     // 生成changelog
     execSync(`pnpm run changelog`, { stdio: 'inherit' });
 
