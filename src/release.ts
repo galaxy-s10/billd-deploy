@@ -3,6 +3,32 @@ import { execSync, exec } from 'child_process';
 import { BilldDeploy } from './interface';
 import { chalkSUCCESS } from './utils/chalkTip';
 
+function isInstallGit() {
+  return new Promise((resolve, reject) => {
+    exec(
+      'command -v git',
+      {
+        cwd: process.cwd(),
+      },
+      (error, stdout, stderr) => {
+        if (error || stderr) {
+          console.log('未安装git');
+          console.log('error', error);
+          console.log('stderr', stderr);
+          reject(error || stderr);
+        }
+        if (stdout.length) {
+          console.log('已安装git', stdout);
+          resolve('ok');
+        } else {
+          console.log('已安装git', stdout);
+          resolve('ok');
+        }
+      }
+    );
+  });
+}
+
 function gitIsClean() {
   return new Promise((resolve, reject) => {
     exec(
@@ -80,19 +106,25 @@ function diffRemote() {
 }
 
 export const handleRelease = async (data: BilldDeploy) => {
-  await gitIsClean();
-  await hasRemoteBranch();
-  await diffRemote();
-  execSync(`npm run release`, { stdio: 'inherit', cwd: process.cwd() });
-  console.log(chalkSUCCESS('更新版本完成'));
-  execSync(`git push --follow-tags`, {
-    stdio: 'inherit',
-    cwd: process.cwd(),
-  });
-  console.log(chalkSUCCESS('提交tag完成'));
-  execSync(`npm run build:${data.env === 'prod' ? 'prod' : 'beta'}`, {
-    stdio: 'inherit',
-    cwd: process.cwd(),
-  });
+  try {
+    await isInstallGit();
+    await gitIsClean();
+    await hasRemoteBranch();
+    await diffRemote();
+    execSync(`npm run release`, { stdio: 'inherit', cwd: process.cwd() });
+    console.log(chalkSUCCESS('更新版本完成'));
+    execSync(`git push --follow-tags`, {
+      stdio: 'inherit',
+      cwd: process.cwd(),
+    });
+    console.log(chalkSUCCESS('提交tag完成'));
+    execSync(`npm run build:${data.env === 'prod' ? 'prod' : 'beta'}`, {
+      stdio: 'inherit',
+      cwd: process.cwd(),
+    });
+  } catch (error) {
+    console.log(error);
+  }
+
   console.log(chalkSUCCESS(`构建${data.env}完成`));
 };
