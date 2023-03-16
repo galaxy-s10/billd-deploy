@@ -1,3 +1,12 @@
+## [1.0.12](https://github.com/galaxy-s10/billd-deploy/compare/v1.0.11...v1.0.12) (2023-03-16)
+
+
+### docs
+
+* readme ([f6dc50e](https://github.com/galaxy-s10/billd-deploy/commit/f6dc50ed53af0763feb34cf2788771fb7c42123b))
+
+
+
 ## [1.0.11](https://github.com/galaxy-s10/billd-deploy/compare/v1.0.10...v1.0.11) (2023-03-16)
 
 
