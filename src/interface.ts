@@ -54,6 +54,9 @@ export interface IBilldDeployConfig {
   /** 使用哪个cdn */
   cdn: (data: BilldDeploy) => CdnType;
 
+  /** 是否使用ssh */
+  ssh: (data: BilldDeploy) => boolean;
+
   /** ssh配置 */
   sshConfig?: (data: BilldDeploy) => ISSHConfig;
 

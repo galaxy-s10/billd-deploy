@@ -3,6 +3,7 @@ import { handleAliOssCDN } from './cdn/ali-oss';
 import { handleHuaweiObsCDN } from './cdn/huawei-obs';
 import { handleQiniuCDN } from './cdn/qiniu';
 import { BilldDeploy, EnvEnum, CdnEnum } from './interface';
+import { handleRelease } from './release';
 import { handleSSH } from './ssh';
 import { chalkSUCCESS, chalkERROR } from './utils/chalkTip';
 import { generateDeployFile, deleteDeployFile } from './utils/git';
@@ -32,7 +33,10 @@ export const deploy = async function (data: BilldDeploy) {
   }
 
   try {
-    await handleBuild(data);
+    if (env === 'prod') {
+      await handleRelease(data);
+    }
+    handleBuild(data);
     generateDeployFile();
     switch (config.cdn(data)) {
       case CdnEnum.huawei:
@@ -45,7 +49,9 @@ export const deploy = async function (data: BilldDeploy) {
         await handleQiniuCDN(data);
         break;
     }
-    await handleSSH(data);
+    if (config.ssh(data)) {
+      await handleSSH(data);
+    }
     deleteDeployFile();
     console.log(chalkSUCCESS(`构建${env}成功`));
     handlePm2Tip(data);

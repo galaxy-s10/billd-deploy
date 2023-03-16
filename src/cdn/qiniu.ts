@@ -24,14 +24,6 @@ export const handleQiniuCDN = function (data: BilldDeploy) {
   // @ts-ignore
   qiniuConfConfig.zone = qiniuConfig.zone;
 
-  const formUploader = new qiniu.form_up.FormUploader(qiniuConfConfig);
-  const options = {
-    scope: qiniuConfig.bucket,
-  };
-  const putPolicy = new qiniu.rs.PutPolicy(options);
-  const uploadToken = putPolicy.uploadToken(mac);
-  const putExtra = new qiniu.form_up.PutExtra();
-
   function findFile(inputDir) {
     const res: string[] = [];
     function loop(dirArr) {
@@ -79,6 +71,14 @@ export const handleQiniuCDN = function (data: BilldDeploy) {
     // eslint-disable-next-line
     async function put(key, filePath) {
       try {
+        const formUploader = new qiniu.form_up.FormUploader(qiniuConfConfig);
+        const options = {
+          // eslint-disable-next-line
+          scope: `${qiniuConfig.bucket}:${key}`,
+        };
+        const putPolicy = new qiniu.rs.PutPolicy(options);
+        const uploadToken = putPolicy.uploadToken(mac);
+        const putExtra = new qiniu.form_up.PutExtra();
         const result = await new Promise<{ code: number; respErr? }>(
           (resolve) => {
             formUploader.putFile(
