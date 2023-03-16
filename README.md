@@ -57,7 +57,7 @@ const myconfig = {
     // 这个data就是你传入deploy的配置，即myconfig
     cdn: (data) => (data.env === 'beta' ? 'none' : 'huawei'), // 要求返回'huawei'或'ali'或'qiniu'或'none'
     // 这个data就是你传入deploy的配置，即myconfig
-    ssh: (data) => false, // 是否使用ssh
+    ssh: (data) => false, // 是否使用ssh,要求返回true或者false
     // 这个data就是你传入deploy的配置，即myconfig
     sshConfig: (data) => {},
     // 这个data就是你传入deploy的配置，即myconfig
