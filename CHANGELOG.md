@@ -1,3 +1,16 @@
+## [1.0.10](https://github.com/galaxy-s10/billd-deploy/compare/v1.0.9...v1.0.10) (2023-03-16)
+
+
+### feat
+
+* 判断git ([709a057](https://github.com/galaxy-s10/billd-deploy/commit/709a057cbbf82f85c86d382c961a787e65600a69))
+
+### fix
+
+* .npmrc ([6f1a83a](https://github.com/galaxy-s10/billd-deploy/commit/6f1a83ab81bb97d612b171673681ef161e3e529f))
+
+
+
 ## [1.0.9](https://github.com/galaxy-s10/billd-deploy/compare/v1.0.8...v1.0.9) (2023-03-16)
 
 
