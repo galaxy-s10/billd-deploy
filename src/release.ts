@@ -3,7 +3,7 @@ import { execSync, exec } from 'child_process';
 import { BilldDeploy } from './interface';
 import { chalkSUCCESS } from './utils/chalkTip';
 
-function isInstallGit() {
+function isInstalledGit() {
   return new Promise((resolve, reject) => {
     exec(
       'command -v git',
@@ -107,7 +107,7 @@ function diffRemote() {
 
 export const handleRelease = async (data: BilldDeploy) => {
   try {
-    await isInstallGit();
+    await isInstalledGit();
     await gitIsClean();
     await hasRemoteBranch();
     await diffRemote();
