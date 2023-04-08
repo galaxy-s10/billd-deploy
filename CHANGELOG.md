@@ -1,3 +1,12 @@
+## [1.0.14](https://github.com/galaxy-s10/billd-deploy/compare/v1.0.13...v1.0.14) (2023-04-08)
+
+
+### fix
+
+* 环境判断 ([b7831bb](https://github.com/galaxy-s10/billd-deploy/commit/b7831bbc3f9115bccd8e2d12adbaa795f0844d1f))
+
+
+
 ## [1.0.13](https://github.com/galaxy-s10/billd-deploy/compare/v1.0.12...v1.0.13) (2023-03-16)
 
 
