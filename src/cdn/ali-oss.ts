@@ -4,7 +4,7 @@ import path from 'path';
 import OSS from 'ali-oss';
 
 import { BilldDeploy } from '../interface';
-import { chalkERROR, chalkSUCCESS, chalkINFO } from '../utils/chalkTip';
+import { chalkERROR, chalkINFO, chalkSUCCESS } from '../utils/chalkTip';
 import Queue from '../utils/queue';
 
 export const handleAliOssCDN = function (data: BilldDeploy) {

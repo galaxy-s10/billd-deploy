@@ -1,8 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 
-import { chalkWARN } from './chalkTip';
 import { BilldDeploy } from '../interface';
+import { chalkWARN } from './chalkTip';
 
 export const handlePm2Tip = (data: BilldDeploy) => {
   const { sshFileConfig, sshConfig } = data.config;

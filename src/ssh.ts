@@ -4,7 +4,7 @@ import path from 'path';
 import { NodeSSH } from 'node-ssh';
 
 import { BilldDeploy } from './interface';
-import { chalkSUCCESS, chalkERROR } from './utils/chalkTip';
+import { chalkERROR, chalkSUCCESS } from './utils/chalkTip';
 
 export const handleSSH = async function (data: BilldDeploy) {
   const { sshFileConfig, sshConfig } = data.config;

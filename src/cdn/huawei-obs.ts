@@ -4,7 +4,7 @@ import path from 'path';
 import OBS from 'esdk-obs-nodejs';
 
 import { BilldDeploy } from '../interface';
-import { chalkERROR, chalkSUCCESS, chalkINFO } from '../utils/chalkTip';
+import { chalkERROR, chalkINFO, chalkSUCCESS } from '../utils/chalkTip';
 import Queue from '../utils/queue';
 
 export const handleHuaweiObsCDN = function (data: BilldDeploy) {

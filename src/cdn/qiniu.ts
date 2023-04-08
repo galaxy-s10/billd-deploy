@@ -4,7 +4,7 @@ import path from 'path';
 import qiniu from 'qiniu';
 
 import { BilldDeploy } from '../interface';
-import { chalkERROR, chalkSUCCESS, chalkINFO } from '../utils/chalkTip';
+import { chalkERROR, chalkINFO, chalkSUCCESS } from '../utils/chalkTip';
 import Queue from '../utils/queue';
 
 export const handleQiniuCDN = function (data: BilldDeploy) {

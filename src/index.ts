@@ -2,11 +2,11 @@ import { handleBuild } from './build';
 import { handleAliOssCDN } from './cdn/ali-oss';
 import { handleHuaweiObsCDN } from './cdn/huawei-obs';
 import { handleQiniuCDN } from './cdn/qiniu';
-import { BilldDeploy, EnvEnum, CdnEnum } from './interface';
+import { BilldDeploy, CdnEnum, EnvEnum } from './interface';
 import { handleRelease } from './release';
 import { handleSSH } from './ssh';
-import { chalkSUCCESS, chalkERROR } from './utils/chalkTip';
-import { generateDeployFile, deleteDeployFile } from './utils/git';
+import { chalkERROR, chalkSUCCESS } from './utils/chalkTip';
+import { deleteDeployFile, generateDeployFile } from './utils/git';
 import { handlePm2Tip } from './utils/pm2Tip';
 
 export * from './interface';
@@ -34,7 +34,7 @@ export const deploy = async function (data: BilldDeploy) {
 
   try {
     if (env === 'prod') {
-      await handleRelease(data);
+      await handleRelease();
     }
     handleBuild(data);
     generateDeployFile();

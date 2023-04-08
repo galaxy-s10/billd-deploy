@@ -1,7 +1,6 @@
-import { execSync, exec } from 'child_process';
+import { exec, execSync } from 'child_process';
 
-import { BilldDeploy } from './interface';
-import { chalkSUCCESS } from './utils/chalkTip';
+import { chalkERROR, chalkINFO, chalkSUCCESS } from './utils/chalkTip';
 
 function isInstalledGit() {
   return new Promise((resolve, reject) => {
@@ -12,16 +11,16 @@ function isInstalledGit() {
       },
       (error, stdout, stderr) => {
         if (error || stderr) {
-          console.log('未安装git');
+          console.log(chalkERROR('未安装git'));
           console.log('error', error);
           console.log('stderr', stderr);
           reject(error || stderr);
         }
         if (stdout.length) {
-          console.log('已安装git', stdout);
+          console.log(chalkINFO('已安装git'), stdout);
           resolve('ok');
         } else {
-          console.log('已安装git', stdout);
+          console.log(chalkINFO('已安装git'), stdout);
           resolve('ok');
         }
       }
@@ -105,26 +104,16 @@ function diffRemote() {
   });
 }
 
-export const handleRelease = async (data: BilldDeploy) => {
-  try {
-    await isInstalledGit();
-    await gitIsClean();
-    await hasRemoteBranch();
-    await diffRemote();
-    execSync(`npm run release`, { stdio: 'inherit', cwd: process.cwd() });
-    console.log(chalkSUCCESS('更新版本完成'));
-    execSync(`git push --follow-tags`, {
-      stdio: 'inherit',
-      cwd: process.cwd(),
-    });
-    console.log(chalkSUCCESS('提交tag完成'));
-    execSync(`npm run build:${data.env === 'prod' ? 'prod' : 'beta'}`, {
-      stdio: 'inherit',
-      cwd: process.cwd(),
-    });
-  } catch (error) {
-    console.log(error);
-  }
-
-  console.log(chalkSUCCESS(`构建${data.env}完成`));
+export const handleRelease = async () => {
+  await isInstalledGit();
+  await gitIsClean();
+  await hasRemoteBranch();
+  await diffRemote();
+  execSync(`npm run release`, { stdio: 'inherit', cwd: process.cwd() });
+  console.log(chalkSUCCESS('更新版本完成'));
+  execSync(`git push --follow-tags`, {
+    stdio: 'inherit',
+    cwd: process.cwd(),
+  });
+  console.log(chalkSUCCESS('提交tag完成'));
 };
