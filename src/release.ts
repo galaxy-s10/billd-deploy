@@ -5,7 +5,7 @@ import { chalkERROR, chalkINFO, chalkSUCCESS } from './utils/chalkTip';
 function isInstalledGit() {
   return new Promise((resolve, reject) => {
     exec(
-      'command -v git',
+      'git -v',
       {
         cwd: process.cwd(),
       },
@@ -88,6 +88,8 @@ function diffRemote() {
       },
       (error, stdout, stderr) => {
         if (error || stderr) {
+          console.log(error);
+          console.log(stderr);
           reject(error || stderr);
         }
         if (stdout.length) {
