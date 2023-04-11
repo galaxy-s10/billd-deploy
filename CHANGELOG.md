@@ -1,3 +1,12 @@
+## [1.0.15](https://github.com/galaxy-s10/billd-deploy/compare/v1.0.14...v1.0.15) (2023-04-11)
+
+
+### fix
+
+* 判断git安装 ([3be99ab](https://github.com/galaxy-s10/billd-deploy/commit/3be99ab01257aec89dc7cf82782586610b7b3bba))
+
+
+
 ## [1.0.14](https://github.com/galaxy-s10/billd-deploy/compare/v1.0.13...v1.0.14) (2023-04-08)
 
 
