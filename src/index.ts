@@ -5,6 +5,7 @@ import { handleQiniuCDN } from './cdn/qiniu';
 import { BilldDeploy, CdnEnum, EnvEnum } from './interface';
 import { handleRelease } from './release';
 import { handleSSH } from './ssh';
+import { calculateRemainingTime } from './utils';
 import { chalkERROR, chalkSUCCESS } from './utils/chalkTip';
 import { deleteDeployFile, generateDeployFile } from './utils/git';
 import { handlePm2Tip } from './utils/pm2Tip';
@@ -12,6 +13,7 @@ import { handlePm2Tip } from './utils/pm2Tip';
 export * from './interface';
 
 export const deploy = async function (data: BilldDeploy) {
+  const startTime = new Date().getTime();
   const { env, config } = data;
   if (!config || !env) {
     console.log(chalkERROR('缺少env或config！'));
@@ -53,8 +55,15 @@ export const deploy = async function (data: BilldDeploy) {
       await handleSSH(data);
     }
     deleteDeployFile();
-    console.log(chalkSUCCESS(`构建${env}成功`));
+    const endTime = new Date().getTime();
     handlePm2Tip(data);
+    console.log(
+      chalkSUCCESS(
+        `${new Date().toLocaleString()}，构建${env}成功，总耗时：${calculateRemainingTime(
+          { startTime, endTime }
+        )}`
+      )
+    );
   } catch (error) {
     console.log(chalkERROR(`构建${env}出错`), error);
   }
