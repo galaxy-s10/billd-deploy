@@ -1,3 +1,12 @@
+## [1.0.16](https://github.com/galaxy-s10/billd-deploy/compare/v1.0.15...v1.0.16) (2023-04-18)
+
+
+### feat
+
+* 构建完成时间 ([1117dc6](https://github.com/galaxy-s10/billd-deploy/commit/1117dc6c72f25e79138f09c60acdeaf7e9f07533))
+
+
+
 ## [1.0.15](https://github.com/galaxy-s10/billd-deploy/compare/v1.0.14...v1.0.15) (2023-04-11)
 
 
