@@ -5,7 +5,8 @@ import { chalkERROR, chalkINFO, chalkSUCCESS } from './utils/chalkTip';
 function isInstalledGit() {
   return new Promise((resolve, reject) => {
     exec(
-      'git -v',
+      // 'git -v',
+      'git --version',
       {
         cwd: process.cwd(),
       },
