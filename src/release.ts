@@ -107,11 +107,13 @@ function diffRemote() {
   });
 }
 
-export const handleRelease = async () => {
-  await isInstalledGit();
-  await gitIsClean();
-  await hasRemoteBranch();
-  await diffRemote();
+export const handleRelease = async (releaseVerifyGit = true) => {
+  if (releaseVerifyGit) {
+    await isInstalledGit();
+    await gitIsClean();
+    await hasRemoteBranch();
+    await diffRemote();
+  }
   execSync(`npm run release`, { stdio: 'inherit', cwd: process.cwd() });
   console.log(chalkSUCCESS('更新版本完成'));
   execSync(`git push --follow-tags`, {
