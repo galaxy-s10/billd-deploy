@@ -1,3 +1,12 @@
+## [1.0.18](https://github.com/galaxy-s10/billd-deploy/compare/v1.0.17...v1.0.18) (2023-10-15)
+
+
+### feat
+
+* releaseVerifyGit ([72aceb4](https://github.com/galaxy-s10/billd-deploy/commit/72aceb44d99d3429b0513345684a61ace93c6d8a))
+
+
+
 ## [1.0.17](https://github.com/galaxy-s10/billd-deploy/compare/v1.0.16...v1.0.17) (2023-10-15)
 
 
