@@ -115,5 +115,6 @@ export interface IBilldDeployConfig {
 export interface BilldDeploy {
   env: EnvType;
   config: IBilldDeployConfig;
-  releaseVerifyGit: boolean;
+  verifyGit?: boolean;
+  shouldRelease?: boolean;
 }

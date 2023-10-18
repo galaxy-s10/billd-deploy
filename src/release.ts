@@ -1,6 +1,11 @@
 import { exec, execSync } from 'child_process';
 
-import { chalkERROR, chalkINFO, chalkSUCCESS } from './utils/chalkTip';
+import {
+  chalkERROR,
+  chalkINFO,
+  chalkSUCCESS,
+  chalkWARN,
+} from './utils/chalkTip';
 
 function isInstalledGit() {
   return new Promise((resolve, reject) => {
@@ -107,18 +112,24 @@ function diffRemote() {
   });
 }
 
-export const handleRelease = async (releaseVerifyGit = true) => {
-  if (releaseVerifyGit) {
+export const handleRelease = async (verifyGit = true, shouldRelease = true) => {
+  if (verifyGit) {
     await isInstalledGit();
     await gitIsClean();
     await hasRemoteBranch();
     await diffRemote();
+  } else {
+    console.log(chalkWARN('不验证git'));
   }
-  execSync(`npm run release`, { stdio: 'inherit', cwd: process.cwd() });
-  console.log(chalkSUCCESS('更新版本完成'));
-  execSync(`git push --follow-tags`, {
-    stdio: 'inherit',
-    cwd: process.cwd(),
-  });
-  console.log(chalkSUCCESS('提交tag完成'));
+  if (shouldRelease) {
+    execSync(`npm run release`, { stdio: 'inherit', cwd: process.cwd() });
+    console.log(chalkSUCCESS('更新版本完成'));
+    execSync(`git push --follow-tags`, {
+      stdio: 'inherit',
+      cwd: process.cwd(),
+    });
+    console.log(chalkSUCCESS('提交tag完成'));
+  } else {
+    console.log(chalkWARN('不执行release'));
+  }
 };

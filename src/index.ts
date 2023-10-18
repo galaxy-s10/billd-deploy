@@ -14,7 +14,7 @@ export * from './interface';
 
 export const deploy = async function (data: BilldDeploy) {
   const startTime = new Date().getTime();
-  const { env, config, releaseVerifyGit } = data;
+  const { env, config, verifyGit, shouldRelease } = data;
   if (!config || !env) {
     console.log(chalkERROR('缺少env或config！'));
     return;
@@ -36,7 +36,7 @@ export const deploy = async function (data: BilldDeploy) {
 
   try {
     if (env === 'prod') {
-      await handleRelease(releaseVerifyGit);
+      await handleRelease(verifyGit, shouldRelease);
     }
     handleBuild(data);
     generateDeployFile();
