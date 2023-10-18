@@ -1,3 +1,12 @@
+## [1.0.19](https://github.com/galaxy-s10/billd-deploy/compare/v1.0.18...v1.0.19) (2023-10-18)
+
+
+### fix
+
+* 参数 ([29b9ca0](https://github.com/galaxy-s10/billd-deploy/commit/29b9ca0148241ef78fadac4daa38db74372d8e71))
+
+
+
 ## [1.0.18](https://github.com/galaxy-s10/billd-deploy/compare/v1.0.17...v1.0.18) (2023-10-15)
 
 
