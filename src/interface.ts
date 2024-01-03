@@ -4,6 +4,11 @@ export interface ISSHConfig {
   password: string;
 }
 
+export interface ITencentCosConfig {
+  SecretId: string;
+  SecretKey: string;
+}
+
 export interface IAliOssConfig {
   /** yourregion填写Bucket所在地域。以华东1（杭州）为例，Region填写为oss-cn-hangzhou。 */
   region: string;
@@ -44,6 +49,7 @@ export enum CdnEnum {
   ali = 'ali',
   huawei = 'huawei',
   qiniu = 'qiniu',
+  tencent = 'tencent',
   none = 'none',
 }
 
@@ -65,6 +71,9 @@ export interface IBilldDeployConfig {
 
   /** https://support.huaweicloud.com/sdk-nodejs-devg-obs/obs_29_0404.html */
   huaweiObsConfig?: (data: BilldDeploy) => IHuaweiObsConfig;
+
+  /** https://www.tencentcloud.com/zh/document/product/436/8629 */
+  tencentCosConfig?: (data: BilldDeploy) => ITencentCosConfig;
 
   /** 七牛云配置 */
   qiniuConfig?: (data: BilldDeploy) => IQiniuConfig;
@@ -93,6 +102,16 @@ export interface IBilldDeployConfig {
 
   /** 上传到华为云obs的文件、目录 */
   huaweiObsFileConfig?: (data: BilldDeploy) => {
+    dir: {
+      local: string;
+    };
+    file: {
+      local: string[];
+    };
+  };
+
+  /** 上传到腾讯云cos的文件、目录 */
+  tencentCosFileConfig?: (data: BilldDeploy) => {
     dir: {
       local: string;
     };

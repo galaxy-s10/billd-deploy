@@ -42,6 +42,7 @@
   "dependencies": {
     "ali-oss": "^6.17.1",
     "billd-html-webpack-plugin": "^1.0.1",
+    "cos-nodejs-sdk-v5": "^2.12.6",
     "esdk-obs-nodejs": "^3.21.6",
     "inquirer": "^8.2.4",
     "node-ssh": "^13.0.1",
