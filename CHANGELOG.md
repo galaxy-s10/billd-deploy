@@ -1,3 +1,13 @@
+## [1.0.20](https://github.com/galaxy-s10/billd-deploy/compare/v1.0.19...v1.0.20) (2024-01-04)
+
+
+### feat
+
+* 初始化腾讯云cos ([be6c259](https://github.com/galaxy-s10/billd-deploy/commit/be6c2593b8e3b9be025437d4d25b1af8c18df5c9))
+* cos ([4839365](https://github.com/galaxy-s10/billd-deploy/commit/48393656be79a82ea1a46263cf5ff0f48f3cb754))
+
+
+
 ## [1.0.19](https://github.com/galaxy-s10/billd-deploy/compare/v1.0.18...v1.0.19) (2023-10-18)
 
 
