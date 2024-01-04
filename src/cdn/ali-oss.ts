@@ -92,15 +92,19 @@ export const handleAliOssCDN = function (data: BilldDeploy) {
           uploadOkRecord.set(filePath, status);
           console.log(
             chalkSUCCESS(
-              // eslint-disable-next-line
-              `cdn上传成功(${uploadOkRecord.size}/${allFile.length}): ${filePath} ===> ${ossFlieName}`
+              `${new Date().toLocaleString()}，cdn上传成功(${
+                uploadOkRecord.size
+                // eslint-disable-next-line
+              }/${allFile.length}): ${filePath} ===> ${ossFlieName}`
             )
           );
         } else {
           uploadErrRecord.set(filePath, status);
           console.log(
             filePath,
-            `cdn上传失败：${uploadErrRecord.size}/${allFile.length}`
+            `${new Date().toLocaleString()}，cdn上传失败：${
+              uploadErrRecord.size
+            }/${allFile.length}`
           );
           console.log(result);
         }
@@ -108,16 +112,26 @@ export const handleAliOssCDN = function (data: BilldDeploy) {
         if (progress === allFile.length) {
           console.log(
             chalkINFO(
-              `所有文件上传cdn完成。成功：${uploadOkRecord.size}/${allFile.length}；失败：${uploadErrRecord.size}/${allFile.length}`
+              `${new Date().toLocaleString()}，所有文件上传cdn完成。成功：${
+                uploadOkRecord.size
+              }/${allFile.length}；失败：${uploadErrRecord.size}/${
+                allFile.length
+              }`
             )
           );
 
           if (uploadErrRecord.size) {
-            console.log(chalkERROR('上传cdn失败数据'), uploadErrRecord);
+            console.log(
+              chalkERROR(`${new Date().toLocaleString()}，上传cdn失败数据`),
+              uploadErrRecord
+            );
           }
         }
       } catch (error) {
-        console.log(chalkERROR('上传cdn错误'), error);
+        console.log(
+          chalkERROR(`${new Date().toLocaleString()}，上传cdn错误`),
+          error
+        );
       }
     }
 
@@ -152,6 +166,9 @@ export const handleAliOssCDN = function (data: BilldDeploy) {
       });
     });
   } catch (error) {
-    console.log(chalkERROR('cdn脚本错误'), error);
+    console.log(
+      chalkERROR(`${new Date().toLocaleString()}，cdn脚本错误`),
+      error
+    );
   }
 };

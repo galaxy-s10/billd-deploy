@@ -1,3 +1,5 @@
+import { StorageClass } from 'cos-nodejs-sdk-v5';
+
 export interface ISSHConfig {
   host: string;
   username: string;
@@ -7,6 +9,10 @@ export interface ISSHConfig {
 export interface ITencentCosConfig {
   SecretId: string;
   SecretKey: string;
+  Bucket: string;
+  Region: string;
+  StorageClass: StorageClass;
+  prefix?: string;
 }
 
 export interface IAliOssConfig {

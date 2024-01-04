@@ -55,6 +55,8 @@ export const handleTencentOssCDN = function (data: BilldDeploy) {
     const client = new COS({
       SecretId: tencentCosConfig.SecretId, // 推荐使用环境变量获取；用户的 SecretId，建议使用子账号密钥，授权遵循最小权限指引，降低使用风险。子账号密钥获取可参考https://www.tencentcloud.com/document/product/598/37140?from_cn_redirect=1
       SecretKey: tencentCosConfig.SecretKey, // 推荐使用环境变量获取；用户的 SecretKey，建议使用子账号密钥，授权遵循最小权限指引，降低使用风险。子账号密钥获取可参考https://www.tencentcloud.com/document/product/598/37140?from_cn_redirect=1
+      FileParallelLimit: 10, // 同一个实例下上传的文件并发数，默认值3
+      ChunkParallelLimit: 10, // 同一个上传文件的分块并发数，默认值3
     });
 
     // 添加tencentCosFileConfig目录
@@ -66,34 +68,51 @@ export const handleTencentOssCDN = function (data: BilldDeploy) {
     });
 
     // eslint-disable-next-line
-    async function put(ossFlieName, filePath) {
+    async function put(cosFlieName, filePath) {
       try {
-        const result = await client.put(
-          ossFlieName,
-          filePath,
-          // 自定义headers
-          {
-            headers: {
-              // 指定PutObject操作时是否覆盖同名目标Object。此处设置为true，表示禁止覆盖同名Object。设置为false，表示允许覆盖同名Object。
-              'x-oss-forbid-overwrite': 'false',
+        const result = await new Promise<{
+          code: number;
+          res?: any;
+          err?: any;
+        }>((resolve) => {
+          client.putObject(
+            {
+              Bucket: tencentCosConfig.Bucket /* 必须 */,
+              Region: tencentCosConfig.Region /* 必须 */,
+              Key: cosFlieName /* 必须 */,
+              StorageClass: tencentCosConfig.StorageClass,
+              Body: fs.createReadStream(filePath), // 上传文件对象
+              // onProgress(progressData) {
+              //   console.log('progressData', JSON.stringify(progressData));
+              // },
             },
-          }
-        );
-        // const result = { res: { status: 200 } };
-        const status = result.res.status;
+            function (err, res) {
+              if (res) {
+                resolve({ code: 200, res });
+              } else {
+                resolve({ code: 400, err });
+              }
+            }
+          );
+        });
+        const status = result.code;
         if (status === 200) {
           uploadOkRecord.set(filePath, status);
           console.log(
             chalkSUCCESS(
-              // eslint-disable-next-line
-              `cdn上传成功(${uploadOkRecord.size}/${allFile.length}): ${filePath} ===> ${ossFlieName}`
+              `${new Date().toLocaleString()}，cdn上传成功(${
+                uploadOkRecord.size
+                // eslint-disable-next-line
+              }/${allFile.length}): ${filePath} ===> ${cosFlieName}`
             )
           );
         } else {
           uploadErrRecord.set(filePath, status);
           console.log(
             filePath,
-            `cdn上传失败：${uploadErrRecord.size}/${allFile.length}`
+            `${new Date().toLocaleString()}，cdn上传失败：${
+              uploadErrRecord.size
+            }/${allFile.length}`
           );
           console.log(result);
         }
@@ -101,16 +120,26 @@ export const handleTencentOssCDN = function (data: BilldDeploy) {
         if (progress === allFile.length) {
           console.log(
             chalkINFO(
-              `所有文件上传cdn完成。成功：${uploadOkRecord.size}/${allFile.length}；失败：${uploadErrRecord.size}/${allFile.length}`
+              `${new Date().toLocaleString()}，所有文件上传cdn完成。成功：${
+                uploadOkRecord.size
+              }/${allFile.length}；失败：${uploadErrRecord.size}/${
+                allFile.length
+              }`
             )
           );
 
           if (uploadErrRecord.size) {
-            console.log(chalkERROR('上传cdn失败数据'), uploadErrRecord);
+            console.log(
+              chalkERROR(`${new Date().toLocaleString()}，上传cdn失败数据`),
+              uploadErrRecord
+            );
           }
         }
       } catch (error) {
-        console.log(chalkERROR('上传cdn错误'), error);
+        console.log(
+          chalkERROR(`${new Date().toLocaleString()}，上传cdn错误`),
+          error
+        );
       }
     }
 
@@ -123,24 +152,27 @@ export const handleTencentOssCDN = function (data: BilldDeploy) {
       allFile.forEach((filePath) => {
         if (tencentCosFileConfig.file.local.includes(filePath)) {
           const filename = filePath.split(path.sep).pop();
-          const ossFlieName = path.join(tencentCosConfig.prefix, filename);
+          const cosFlieName = path.join(
+            tencentCosConfig.prefix || '',
+            filename
+          );
           uploadQueue.addTask(() =>
             put(
-              path.sep === '/' ? ossFlieName : ossFlieName.replace(/\\/g, '/'),
+              path.sep === '/' ? cosFlieName : cosFlieName.replace(/\\/g, '/'),
               filePath
             )
           );
         } else {
           const dirName = tencentCosFileConfig.dir.local.split(path.sep).pop();
-          const ossFlieName =
-            tencentCosConfig.prefix +
+          const cosFlieName =
+            (tencentCosConfig.prefix || '') +
             filePath.replace(
               tencentCosFileConfig.dir.local,
               path.sep + dirName
             );
           uploadQueue.addTask(() =>
             put(
-              path.sep === '/' ? ossFlieName : ossFlieName.replace(/\\/g, '/'),
+              path.sep === '/' ? cosFlieName : cosFlieName.replace(/\\/g, '/'),
               filePath
             )
           );
@@ -148,6 +180,9 @@ export const handleTencentOssCDN = function (data: BilldDeploy) {
       });
     });
   } catch (error) {
-    console.log(chalkERROR('cdn脚本错误'), error);
+    console.log(
+      chalkERROR(`${new Date().toLocaleString()}，cdn脚本错误`),
+      error
+    );
   }
 };

@@ -2,6 +2,7 @@ import { handleBuild } from './build';
 import { handleAliOssCDN } from './cdn/ali-oss';
 import { handleHuaweiObsCDN } from './cdn/huawei-obs';
 import { handleQiniuCDN } from './cdn/qiniu';
+import { handleTencentOssCDN } from './cdn/tencent-cos';
 import { BilldDeploy, CdnEnum, EnvEnum } from './interface';
 import { handleRelease } from './release';
 import { handleSSH } from './ssh';
@@ -50,6 +51,9 @@ export const deploy = async function (data: BilldDeploy) {
       case CdnEnum.qiniu:
         await handleQiniuCDN(data);
         break;
+      case CdnEnum.tencent:
+        await handleTencentOssCDN(data);
+        break;
     }
     if (config.ssh(data)) {
       await handleSSH(data);
@@ -65,6 +69,9 @@ export const deploy = async function (data: BilldDeploy) {
       )
     );
   } catch (error) {
-    console.log(chalkERROR(`构建${env}出错`), error);
+    console.log(
+      chalkERROR(`${new Date().toLocaleString()}，构建${env}出错`),
+      error
+    );
   }
 };
