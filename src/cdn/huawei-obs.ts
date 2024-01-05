@@ -147,7 +147,7 @@ export const handleHuaweiObsCDN = function (data: BilldDeploy) {
       });
       allFile.forEach((filePath) => {
         if (huaweiObsFileConfig.file.local.includes(filePath)) {
-          const filename = filePath.split(path.sep).pop();
+          const filename = filePath.split(path.sep).pop() || '';
           const obsFlieName = path.join(obsPrefix, filename);
           uploadQueue.addTask(() =>
             put(
@@ -157,10 +157,15 @@ export const handleHuaweiObsCDN = function (data: BilldDeploy) {
             )
           );
         } else {
-          const dirName = huaweiObsFileConfig.dir.local.split(path.sep).pop();
+          const dirName =
+            huaweiObsFileConfig.dir.local.split(path.sep).pop() || '';
+          const ignoreDir = huaweiObsFileConfig.dir.ignoreDir;
           const obsFlieName =
             obsPrefix +
-            filePath.replace(huaweiObsFileConfig.dir.local, path.sep + dirName);
+            filePath.replace(
+              huaweiObsFileConfig.dir.local,
+              ignoreDir ? '' : path.sep + dirName
+            );
           uploadQueue.addTask(() =>
             put(
               obsBucket,

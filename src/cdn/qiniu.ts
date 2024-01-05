@@ -156,16 +156,20 @@ export const handleQiniuCDN = function (data: BilldDeploy) {
       });
       allFile.forEach((filePath) => {
         if (qiniuFileConfig.file.local.includes(filePath)) {
-          const filename = filePath.split(path.sep).pop();
+          const filename = filePath.split(path.sep).pop() || '';
           const key = path.join(qiniuConfig.prefix, filename);
           uploadQueue.addTask(() =>
             put(path.sep === '/' ? key : key.replace(/\\/g, '/'), filePath)
           );
         } else {
-          const dirName = qiniuFileConfig.dir.local.split(path.sep).pop();
+          const dirName = qiniuFileConfig.dir.local.split(path.sep).pop() || '';
+          const ignoreDir = qiniuFileConfig.dir.ignoreDir;
           const key =
             qiniuConfig.prefix +
-            filePath.replace(qiniuFileConfig.dir.local, path.sep + dirName);
+            filePath.replace(
+              qiniuFileConfig.dir.local,
+              ignoreDir ? '' : path.sep + dirName
+            );
           uploadQueue.addTask(() =>
             put(path.sep === '/' ? key : key.replace(/\\/g, '/'), filePath)
           );

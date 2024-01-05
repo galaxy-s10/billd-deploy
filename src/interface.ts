@@ -89,6 +89,7 @@ export interface IBilldDeployConfig {
     dir: {
       local: string;
       remote: string;
+      ignoreDir?: boolean;
     };
     file: {
       local: string[];
@@ -100,6 +101,7 @@ export interface IBilldDeployConfig {
   aliOssFileConfig?: (data: BilldDeploy) => {
     dir: {
       local: string;
+      ignoreDir?: boolean;
     };
     file: {
       local: string[];
@@ -110,6 +112,7 @@ export interface IBilldDeployConfig {
   huaweiObsFileConfig?: (data: BilldDeploy) => {
     dir: {
       local: string;
+      ignoreDir?: boolean;
     };
     file: {
       local: string[];
@@ -120,6 +123,7 @@ export interface IBilldDeployConfig {
   tencentCosFileConfig?: (data: BilldDeploy) => {
     dir: {
       local: string;
+      ignoreDir?: boolean;
     };
     file: {
       local: string[];
@@ -130,6 +134,7 @@ export interface IBilldDeployConfig {
   qiniuFileConfig?: (data: BilldDeploy) => {
     dir: {
       local: string;
+      ignoreDir?: boolean;
     };
     file: {
       local: string[];

@@ -21,7 +21,7 @@ export const handleSSH = async function (data: BilldDeploy) {
   }
 
   async function uploadFiles() {
-    const dirName = serverFile.dir.local.split(path.sep).pop();
+    const dirName = serverFile.dir.local.split(path.sep).pop() || '';
     if (!fs.existsSync(serverFile.dir.local)) {
       console.log(chalkERROR(`${serverFile.dir.local},不存在！`));
       return;
@@ -53,9 +53,9 @@ export const handleSSH = async function (data: BilldDeploy) {
       )
     );
 
-    const arr = [];
+    const arr: any[] = [];
     serverFile.file.local.forEach((item) => {
-      const filename = item.split(path.sep).pop();
+      const filename = item.split(path.sep).pop() || '';
       // 服务器路径直接写死（因为服务器的路径一定是/aa/bb/ccc这样的），如果用path.resolve或者join处理的话，win环境下会出问题。
       // 将传入的remote最后的/替换掉，防止出错
       const oldRemote1 = serverFile.file.remote.replace(/\/$/, '');

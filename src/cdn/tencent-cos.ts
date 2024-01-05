@@ -151,7 +151,7 @@ export const handleTencentOssCDN = function (data: BilldDeploy) {
       });
       allFile.forEach((filePath) => {
         if (tencentCosFileConfig.file.local.includes(filePath)) {
-          const filename = filePath.split(path.sep).pop();
+          const filename = filePath.split(path.sep).pop() || '';
           const cosFlieName = path.join(
             tencentCosConfig.prefix || '',
             filename
@@ -163,12 +163,14 @@ export const handleTencentOssCDN = function (data: BilldDeploy) {
             )
           );
         } else {
-          const dirName = tencentCosFileConfig.dir.local.split(path.sep).pop();
+          const dirName =
+            tencentCosFileConfig.dir.local.split(path.sep).pop() || '';
+          const ignoreDir = tencentCosFileConfig.dir.ignoreDir;
           const cosFlieName =
             (tencentCosConfig.prefix || '') +
             filePath.replace(
               tencentCosFileConfig.dir.local,
-              path.sep + dirName
+              ignoreDir ? '' : path.sep + dirName
             );
           uploadQueue.addTask(() =>
             put(

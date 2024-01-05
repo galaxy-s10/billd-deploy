@@ -143,7 +143,7 @@ export const handleAliOssCDN = function (data: BilldDeploy) {
       });
       allFile.forEach((filePath) => {
         if (aliOssFileConfig.file.local.includes(filePath)) {
-          const filename = filePath.split(path.sep).pop();
+          const filename = filePath.split(path.sep).pop() || '';
           const ossFlieName = path.join(aliOssConfig.prefix, filename);
           uploadQueue.addTask(() =>
             put(
@@ -152,10 +152,15 @@ export const handleAliOssCDN = function (data: BilldDeploy) {
             )
           );
         } else {
-          const dirName = aliOssFileConfig.dir.local.split(path.sep).pop();
+          const dirName =
+            aliOssFileConfig.dir.local.split(path.sep).pop() || '';
+          const ignoreDir = aliOssFileConfig.dir.ignoreDir;
           const ossFlieName =
             aliOssConfig.prefix +
-            filePath.replace(aliOssFileConfig.dir.local, path.sep + dirName);
+            filePath.replace(
+              aliOssFileConfig.dir.local,
+              ignoreDir ? '' : path.sep + dirName
+            );
           uploadQueue.addTask(() =>
             put(
               path.sep === '/' ? ossFlieName : ossFlieName.replace(/\\/g, '/'),
