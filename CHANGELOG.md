@@ -1,3 +1,12 @@
+## [1.0.21](https://github.com/galaxy-s10/billd-deploy/compare/v1.0.20...v1.0.21) (2024-01-05)
+
+
+### feat
+
+* ignoreDir ([12b85d3](https://github.com/galaxy-s10/billd-deploy/commit/12b85d3c0a2701965ec78688a5b3c8e6de3f6f38))
+
+
+
 ## [1.0.20](https://github.com/galaxy-s10/billd-deploy/compare/v1.0.19...v1.0.20) (2024-01-04)
 
 
