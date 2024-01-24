@@ -13,7 +13,7 @@
 </h1>
 
 <p align="center">
-部署脚本,支持阿里云oss、华为云obs、七牛云
+部署脚本,支持阿里云oss、腾讯云cos、华为云obs、七牛云
 </p>
 
 <div align="center">
