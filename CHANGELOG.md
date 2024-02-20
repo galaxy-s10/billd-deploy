@@ -1,3 +1,12 @@
+## [1.0.23](https://github.com/galaxy-s10/billd-deploy/compare/v1.0.22...v1.0.23) (2024-02-20)
+
+
+### feat
+
+* log ([109306d](https://github.com/galaxy-s10/billd-deploy/commit/109306d3bffb3da77a82ad16da451cfece33113f))
+
+
+
 ## [1.0.22](https://github.com/galaxy-s10/billd-deploy/compare/v1.0.21...v1.0.22) (2024-02-20)
 
 
