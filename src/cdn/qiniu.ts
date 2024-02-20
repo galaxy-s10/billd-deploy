@@ -105,7 +105,7 @@ export const handleQiniuCDN = function (data: BilldDeploy) {
           uploadOkRecord.set(filePath, status);
           console.log(
             chalkSUCCESS(
-              `${new Date().toLocaleString()}，cdn上传成功(${
+              `cdn上传成功(${
                 uploadOkRecord.size
                 // eslint-disable-next-line
               }/${allFile.length}): ${filePath} ===> ${key}`
@@ -115,9 +115,7 @@ export const handleQiniuCDN = function (data: BilldDeploy) {
           uploadErrRecord.set(filePath, status);
           console.log(
             filePath,
-            `${new Date().toLocaleString()}，cdn上传失败：${
-              uploadErrRecord.size
-            }/${allFile.length}`
+            `cdn上传失败：${uploadErrRecord.size}/${allFile.length}`
           );
           console.log(result.respErr);
         }
@@ -125,26 +123,16 @@ export const handleQiniuCDN = function (data: BilldDeploy) {
         if (progress === allFile.length) {
           console.log(
             chalkINFO(
-              `${new Date().toLocaleString()}，所有文件上传cdn完成。成功：${
-                uploadOkRecord.size
-              }/${allFile.length}；失败：${uploadErrRecord.size}/${
-                allFile.length
-              }`
+              `所有文件上传cdn完成。成功：${uploadOkRecord.size}/${allFile.length}；失败：${uploadErrRecord.size}/${allFile.length}`
             )
           );
 
           if (uploadErrRecord.size) {
-            console.log(
-              chalkERROR(`${new Date().toLocaleString()}，上传cdn失败数据`),
-              uploadErrRecord
-            );
+            console.log(chalkERROR(`上传cdn失败数据`), uploadErrRecord);
           }
         }
       } catch (error) {
-        console.log(
-          chalkERROR(`${new Date().toLocaleString()}，上传cdn错误`),
-          error
-        );
+        console.log(chalkERROR(`上传cdn错误`), error);
       }
     }
 
@@ -177,9 +165,6 @@ export const handleQiniuCDN = function (data: BilldDeploy) {
       });
     });
   } catch (error) {
-    console.log(
-      chalkERROR(`${new Date().toLocaleString()}，cdn脚本错误`),
-      error
-    );
+    console.log(chalkERROR(`cdn脚本错误`), error);
   }
 };

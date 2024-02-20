@@ -63,15 +63,13 @@ export const deploy = async function (data: BilldDeploy) {
     handlePm2Tip(data);
     console.log(
       chalkSUCCESS(
-        `${new Date().toLocaleString()}，构建${env}成功，总耗时：${calculateRemainingTime(
-          { startTime, endTime }
-        )}`
+        `构建${env}成功，总耗时：${calculateRemainingTime({
+          startTime,
+          endTime,
+        })}`
       )
     );
   } catch (error) {
-    console.log(
-      chalkERROR(`${new Date().toLocaleString()}，构建${env}出错`),
-      error
-    );
+    console.log(chalkERROR(`构建${env}出错`), error);
   }
 };
