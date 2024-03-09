@@ -1,3 +1,12 @@
+## [1.0.25](https://github.com/galaxy-s10/billd-deploy/compare/v1.0.24...v1.0.25) (2024-03-09)
+
+
+### fix
+
+* 优化 ([41f806b](https://github.com/galaxy-s10/billd-deploy/commit/41f806b5d28af40997b8d993cb74e1ad435a5ea4))
+
+
+
 ## [1.0.24](https://github.com/galaxy-s10/billd-deploy/compare/v1.0.23...v1.0.24) (2024-03-09)
 
 
