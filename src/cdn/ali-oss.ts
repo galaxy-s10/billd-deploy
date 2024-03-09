@@ -92,7 +92,7 @@ export const handleAliOssCDN = function (data: BilldDeploy) {
           uploadOkRecord.set(filePath, status);
           console.log(
             chalkSUCCESS(
-              `cdn上传成功(${
+              `上传ali-oss成功(${
                 uploadOkRecord.size
                 // eslint-disable-next-line
               }/${allFile.length}): ${filePath} ===> ${ossFlieName}`
@@ -104,7 +104,7 @@ export const handleAliOssCDN = function (data: BilldDeploy) {
           console.log(
             chalkERROR(
               // eslint-disable-next-line
-              `cdn上传失败(${uploadErrRecord.size}/${allFile.length}): ${filePath} ===> ${ossFlieName}`
+              `上传ali-oss失败(${uploadErrRecord.size}/${allFile.length}): ${filePath} ===> ${ossFlieName}`
             )
           );
         }
@@ -112,16 +112,16 @@ export const handleAliOssCDN = function (data: BilldDeploy) {
         if (progress === allFile.length) {
           console.log(
             chalkINFO(
-              `所有文件上传cdn完成。成功：${uploadOkRecord.size}/${allFile.length}；失败：${uploadErrRecord.size}/${allFile.length}`
+              `所有文件上传ali-oss完成。成功：${uploadOkRecord.size}/${allFile.length}；失败：${uploadErrRecord.size}/${allFile.length}`
             )
           );
 
           if (uploadErrRecord.size) {
-            console.log(chalkERROR(`上传cdn失败数据`), uploadErrRecord);
+            console.log(chalkERROR(`上传ali-oss失败数据`), uploadErrRecord);
           }
         }
       } catch (error) {
-        console.log(chalkERROR(`上传cdn错误`), error);
+        console.log(chalkERROR(`上传ali-oss错误`), error);
       }
     }
 
