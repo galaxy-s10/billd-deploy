@@ -83,7 +83,7 @@ export const handleHuaweiObsCDN = function (data: BilldDeploy) {
               // eslint-disable-next-line
               (err, result) => {
                 if (err) {
-                  return resolve({ code: 500, err });
+                  return resolve({ code: 500, result, err });
                 }
                 resolve({ code: 200, result });
               }
@@ -104,11 +104,13 @@ export const handleHuaweiObsCDN = function (data: BilldDeploy) {
           );
         } else {
           uploadErrRecord.set(filePath, status);
+          console.log(result);
           console.log(
-            filePath,
-            `cdn上传失败：${uploadErrRecord.size}/${allFile.length}`
+            chalkERROR(
+              // eslint-disable-next-line
+              `cdn上传失败(${uploadErrRecord.size}/${allFile.length}): ${filePath} ===> ${obsFlieName}`
+            )
           );
-          console.log(result.err);
         }
         const progress = uploadOkRecord.size + uploadErrRecord.size;
         if (progress === allFile.length) {

@@ -100,11 +100,13 @@ export const handleAliOssCDN = function (data: BilldDeploy) {
           );
         } else {
           uploadErrRecord.set(filePath, status);
-          console.log(
-            filePath,
-            `cdn上传失败：${uploadErrRecord.size}/${allFile.length}`
-          );
           console.log(result);
+          console.log(
+            chalkERROR(
+              // eslint-disable-next-line
+              `cdn上传失败(${uploadErrRecord.size}/${allFile.length}): ${filePath} ===> ${ossFlieName}`
+            )
+          );
         }
         const progress = uploadOkRecord.size + uploadErrRecord.size;
         if (progress === allFile.length) {

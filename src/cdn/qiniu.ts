@@ -79,26 +79,30 @@ export const handleQiniuCDN = function (data: BilldDeploy) {
         const putPolicy = new qiniu.rs.PutPolicy(options);
         const uploadToken = putPolicy.uploadToken(mac);
         const putExtra = new qiniu.form_up.PutExtra();
-        const result = await new Promise<{ code: number; respErr? }>(
-          (resolve) => {
-            formUploader.putFile(
-              uploadToken,
-              key,
-              filePath,
-              putExtra,
-              function (respErr, respBody, respInfo) {
-                if (respErr) {
-                  return resolve({ code: 500, respErr });
-                }
-                if (respInfo.statusCode == 200) {
-                  return resolve({ code: 200 });
-                } else {
-                  return resolve({ code: 200 });
-                }
+        const result = await new Promise<{
+          code: number;
+          respErr?;
+          respBody?;
+          respInfo?;
+        }>((resolve) => {
+          formUploader.putFile(
+            uploadToken,
+            key,
+            filePath,
+            putExtra,
+            function (respErr, respBody, respInfo) {
+              console.log(respErr, respBody, respInfo);
+              if (respErr) {
+                return resolve({ code: 500, respErr, respBody, respInfo });
               }
-            );
-          }
-        );
+              if (respInfo.statusCode == 200) {
+                return resolve({ code: 200 });
+              } else {
+                return resolve({ code: 500, respErr, respBody, respInfo });
+              }
+            }
+          );
+        });
         // const result = { code: 200 }
         const status = result.code;
         if (status === 200) {
@@ -113,11 +117,13 @@ export const handleQiniuCDN = function (data: BilldDeploy) {
           );
         } else {
           uploadErrRecord.set(filePath, status);
+          console.log(result);
           console.log(
-            filePath,
-            `cdn上传失败：${uploadErrRecord.size}/${allFile.length}`
+            chalkERROR(
+              // eslint-disable-next-line
+              `cdn上传失败(${uploadErrRecord.size}/${allFile.length}): ${filePath} ===> ${key}`
+            )
           );
-          console.log(result.respErr);
         }
         const progress = uploadOkRecord.size + uploadErrRecord.size;
         if (progress === allFile.length) {

@@ -40,7 +40,7 @@
 
 # 安装
 
-```sh
+```bash
 npm i billd-deploy
 ```
 
@@ -240,13 +240,13 @@ deploy({
 
 ## 部署测试环境
 
-```sh
+```bash
 npm run deploy:beta
 ```
 
 ## 部署正式环境
 
-```sh
+```bash
 npm run deploy:prod
 ```
 
@@ -266,6 +266,30 @@ npm run deploy:prod
 }
 ```
 
+# 调试
+
+- 在本地的 billd-deploy 项目目录下执行：
+
+```bash
+pnpm link --global --dir=./
+```
+
+- 启动项目：
+
+```bash
+npm run dev
+```
+
+- 在用到 billd-deploy 的项目目录下执行：
+
+```bash
+pnpm link --global billd-deploy
+```
+
 # 源码
 
 github：[https://github.com/galaxy-s10/billd-deploy](https://github.com/galaxy-s10/billd-deploy),欢迎 star or fork！
+
+```
+
+```

@@ -90,7 +90,7 @@ export const handleTencentOssCDN = function (data: BilldDeploy) {
               if (res) {
                 resolve({ code: 200, res });
               } else {
-                resolve({ code: 400, err });
+                resolve({ code: 400, res, err });
               }
             }
           );
@@ -108,11 +108,13 @@ export const handleTencentOssCDN = function (data: BilldDeploy) {
           );
         } else {
           uploadErrRecord.set(filePath, status);
-          console.log(
-            filePath,
-            `cdn上传失败：${uploadErrRecord.size}/${allFile.length}`
-          );
           console.log(result);
+          console.log(
+            chalkERROR(
+              // eslint-disable-next-line
+              `cdn上传失败(${uploadErrRecord.size}/${allFile.length}): ${filePath} ===> ${cosFlieName}`
+            )
+          );
         }
         const progress = uploadOkRecord.size + uploadErrRecord.size;
         if (progress === allFile.length) {
