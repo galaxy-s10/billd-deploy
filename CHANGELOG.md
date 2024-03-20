@@ -1,3 +1,12 @@
+## [1.0.26](https://github.com/galaxy-s10/billd-deploy/compare/v1.0.25...v1.0.26) (2024-03-20)
+
+
+### fix
+
+* ssh ignoreDir ([7997d58](https://github.com/galaxy-s10/billd-deploy/commit/7997d583ab122471af4e3d974ab578440fa6a432))
+
+
+
 ## [1.0.25](https://github.com/galaxy-s10/billd-deploy/compare/v1.0.24...v1.0.25) (2024-03-09)
 
 
