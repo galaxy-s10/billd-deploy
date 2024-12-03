@@ -110,33 +110,33 @@ export interface IBilldDeployConfig {
 
   /** 上传到华为云obs的文件、目录 */
   huaweiObsFileConfig?: (data: BilldDeploy) => {
-    dir: {
+    dir?: {
       local: string;
       ignoreDir?: boolean;
     };
-    file: {
+    file?: {
       local: string[];
     };
   };
 
   /** 上传到腾讯云cos的文件、目录 */
   tencentCosFileConfig?: (data: BilldDeploy) => {
-    dir: {
+    dir?: {
       local: string;
       ignoreDir?: boolean;
     };
-    file: {
+    file?: {
       local: string[];
     };
   };
 
   /** 上传到七牛云的文件、目录 */
   qiniuFileConfig?: (data: BilldDeploy) => {
-    dir: {
+    dir?: {
       local: string;
       ignoreDir?: boolean;
     };
-    file: {
+    file?: {
       local: string[];
     };
   };

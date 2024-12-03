@@ -4,7 +4,12 @@ import path from 'path';
 import OBS from 'esdk-obs-nodejs';
 
 import { BilldDeploy } from '../interface';
-import { chalkERROR, chalkINFO, chalkSUCCESS } from '../utils/chalkTip';
+import {
+  chalkERROR,
+  chalkINFO,
+  chalkSUCCESS,
+  chalkWARN,
+} from '../utils/chalkTip';
 import Queue from '../utils/queue';
 
 export const handleHuaweiObsCDN = function (data: BilldDeploy) {
@@ -61,13 +66,21 @@ export const handleHuaweiObsCDN = function (data: BilldDeploy) {
       server: huaweiObsConfig.server, // 华为obs browser+客户端里面，桶列表，找到对应的桶，看旁边的操作栏里面基本信息，找到Endpoint
     });
 
-    // 添加huaweiObsFileConfig目录
-    allFile.push(...findFile(huaweiObsFileConfig.dir.local));
+    if (huaweiObsFileConfig.dir) {
+      // 添加huaweiObsFileConfig目录
+      allFile.push(...findFile(huaweiObsFileConfig.dir.local));
+    } else {
+      console.log(chalkWARN('没有配置上传本地目录到huawei-obs目录'));
+    }
 
-    huaweiObsFileConfig.file.local.forEach((item) => {
-      // 添加huaweiObsFileConfig的文件
-      allFile.push(item);
-    });
+    if (huaweiObsFileConfig.file) {
+      huaweiObsFileConfig.file.local.forEach((item) => {
+        // 添加huaweiObsFileConfig的文件
+        allFile.push(item);
+      });
+    } else {
+      console.log(chalkWARN('没有配置上传本地文件到huawei-obs目录'));
+    }
 
     // eslint-disable-next-line
     async function put(obsBucket, obsFlieName, filePath) {
@@ -136,33 +149,41 @@ export const handleHuaweiObsCDN = function (data: BilldDeploy) {
         done: () => resolve('all done~'),
       });
       allFile.forEach((filePath) => {
-        if (huaweiObsFileConfig.file.local.includes(filePath)) {
-          const filename = filePath.split(path.sep).pop() || '';
-          const obsFlieName = path.join(obsPrefix, filename);
-          uploadQueue.addTask(() =>
-            put(
-              obsBucket,
-              path.sep === '/' ? obsFlieName : obsFlieName.replace(/\\/g, '/'),
-              filePath
-            )
-          );
-        } else {
-          const dirName =
-            huaweiObsFileConfig.dir.local.split(path.sep).pop() || '';
-          const ignoreDir = huaweiObsFileConfig.dir.ignoreDir;
-          const obsFlieName =
-            obsPrefix +
-            filePath.replace(
-              huaweiObsFileConfig.dir.local,
-              ignoreDir ? '' : path.sep + dirName
+        if (huaweiObsFileConfig.file) {
+          if (huaweiObsFileConfig.file.local.includes(filePath)) {
+            const filename = filePath.split(path.sep).pop() || '';
+            const obsFlieName = path.join(obsPrefix, filename);
+            uploadQueue.addTask(() =>
+              put(
+                obsBucket,
+                path.sep === '/'
+                  ? obsFlieName
+                  : obsFlieName.replace(/\\/g, '/'),
+                filePath
+              )
             );
-          uploadQueue.addTask(() =>
-            put(
-              obsBucket,
-              path.sep === '/' ? obsFlieName : obsFlieName.replace(/\\/g, '/'),
-              filePath
-            )
-          );
+          } else {
+            if (huaweiObsFileConfig.dir) {
+              const dirName =
+                huaweiObsFileConfig.dir.local.split(path.sep).pop() || '';
+              const ignoreDir = huaweiObsFileConfig.dir.ignoreDir;
+              const obsFlieName =
+                obsPrefix +
+                filePath.replace(
+                  huaweiObsFileConfig.dir.local,
+                  ignoreDir ? '' : path.sep + dirName
+                );
+              uploadQueue.addTask(() =>
+                put(
+                  obsBucket,
+                  path.sep === '/'
+                    ? obsFlieName
+                    : obsFlieName.replace(/\\/g, '/'),
+                  filePath
+                )
+              );
+            }
+          }
         }
       });
     });

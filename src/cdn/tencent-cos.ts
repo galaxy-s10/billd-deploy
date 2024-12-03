@@ -4,7 +4,12 @@ import path from 'path';
 import COS from 'cos-nodejs-sdk-v5';
 
 import { BilldDeploy } from '../interface';
-import { chalkERROR, chalkINFO, chalkSUCCESS } from '../utils/chalkTip';
+import {
+  chalkERROR,
+  chalkINFO,
+  chalkSUCCESS,
+  chalkWARN,
+} from '../utils/chalkTip';
 import Queue from '../utils/queue';
 
 export const handleTencentOssCDN = function (data: BilldDeploy) {
@@ -59,13 +64,21 @@ export const handleTencentOssCDN = function (data: BilldDeploy) {
       ChunkParallelLimit: 10, // 同一个上传文件的分块并发数，默认值3
     });
 
-    // 添加tencentCosFileConfig目录
-    allFile.push(...findFile(tencentCosFileConfig.dir.local));
+    if (tencentCosFileConfig.dir) {
+      // 添加tencentCosFileConfig目录
+      allFile.push(...findFile(tencentCosFileConfig.dir.local));
+    } else {
+      console.log(chalkWARN('没有配置上传本地文件到tencent-cos目录'));
+    }
 
-    tencentCosFileConfig.file.local.forEach((item) => {
-      // 添加tencentCosFileConfig的文件
-      allFile.push(item);
-    });
+    if (tencentCosFileConfig.file) {
+      tencentCosFileConfig.file.local.forEach((item) => {
+        // 添加tencentCosFileConfig的文件
+        allFile.push(item);
+      });
+    } else {
+      console.log(chalkWARN('没有配置上传本地文件到tencent-cos目录'));
+    }
 
     // eslint-disable-next-line
     async function put(cosFlieName, filePath) {
@@ -140,34 +153,42 @@ export const handleTencentOssCDN = function (data: BilldDeploy) {
         done: () => resolve('all done~'),
       });
       allFile.forEach((filePath) => {
-        if (tencentCosFileConfig.file.local.includes(filePath)) {
-          const filename = filePath.split(path.sep).pop() || '';
-          const cosFlieName = path.join(
-            tencentCosConfig.prefix || '',
-            filename
-          );
-          uploadQueue.addTask(() =>
-            put(
-              path.sep === '/' ? cosFlieName : cosFlieName.replace(/\\/g, '/'),
-              filePath
-            )
-          );
-        } else {
-          const dirName =
-            tencentCosFileConfig.dir.local.split(path.sep).pop() || '';
-          const ignoreDir = tencentCosFileConfig.dir.ignoreDir;
-          const cosFlieName =
-            (tencentCosConfig.prefix || '') +
-            filePath.replace(
-              tencentCosFileConfig.dir.local,
-              ignoreDir ? '' : path.sep + dirName
+        if (tencentCosFileConfig.file) {
+          if (tencentCosFileConfig.file.local.includes(filePath)) {
+            const filename = filePath.split(path.sep).pop() || '';
+            const cosFlieName = path.join(
+              tencentCosConfig.prefix || '',
+              filename
             );
-          uploadQueue.addTask(() =>
-            put(
-              path.sep === '/' ? cosFlieName : cosFlieName.replace(/\\/g, '/'),
-              filePath
-            )
-          );
+            uploadQueue.addTask(() =>
+              put(
+                path.sep === '/'
+                  ? cosFlieName
+                  : cosFlieName.replace(/\\/g, '/'),
+                filePath
+              )
+            );
+          } else {
+            if (tencentCosFileConfig.dir) {
+              const dirName =
+                tencentCosFileConfig.dir.local.split(path.sep).pop() || '';
+              const ignoreDir = tencentCosFileConfig.dir.ignoreDir;
+              const cosFlieName =
+                (tencentCosConfig.prefix || '') +
+                filePath.replace(
+                  tencentCosFileConfig.dir.local,
+                  ignoreDir ? '' : path.sep + dirName
+                );
+              uploadQueue.addTask(() =>
+                put(
+                  path.sep === '/'
+                    ? cosFlieName
+                    : cosFlieName.replace(/\\/g, '/'),
+                  filePath
+                )
+              );
+            }
+          }
         }
       });
     });

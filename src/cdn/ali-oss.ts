@@ -4,7 +4,12 @@ import path from 'path';
 import OSS from 'ali-oss';
 
 import { BilldDeploy } from '../interface';
-import { chalkERROR, chalkINFO, chalkSUCCESS } from '../utils/chalkTip';
+import {
+  chalkERROR,
+  chalkINFO,
+  chalkSUCCESS,
+  chalkWARN,
+} from '../utils/chalkTip';
 import Queue from '../utils/queue';
 
 export const handleAliOssCDN = function (data: BilldDeploy) {
@@ -64,13 +69,21 @@ export const handleAliOssCDN = function (data: BilldDeploy) {
       prefix: aliOssConfig.prefix,
     });
 
-    // 添加aliOssFileConfig目录
-    allFile.push(...findFile(aliOssFileConfig.dir.local));
+    if (aliOssFileConfig.dir) {
+      // 添加aliOssFileConfig目录
+      allFile.push(...findFile(aliOssFileConfig.dir.local));
+    } else {
+      console.log(chalkWARN('没有配置上传本地目录到ali-oss目录'));
+    }
 
-    aliOssFileConfig.file.local.forEach((item) => {
-      // 添加aliOssFileConfig的文件
-      allFile.push(item);
-    });
+    if (aliOssFileConfig.file) {
+      aliOssFileConfig.file.local.forEach((item) => {
+        // 添加aliOssFileConfig的文件
+        allFile.push(item);
+      });
+    } else {
+      console.log(chalkWARN('没有配置上传本地文件到ali-oss目录'));
+    }
 
     // eslint-disable-next-line
     async function put(ossFlieName, filePath) {
@@ -132,31 +145,39 @@ export const handleAliOssCDN = function (data: BilldDeploy) {
         done: () => resolve('all done~'),
       });
       allFile.forEach((filePath) => {
-        if (aliOssFileConfig.file.local.includes(filePath)) {
-          const filename = filePath.split(path.sep).pop() || '';
-          const ossFlieName = path.join(aliOssConfig.prefix, filename);
-          uploadQueue.addTask(() =>
-            put(
-              path.sep === '/' ? ossFlieName : ossFlieName.replace(/\\/g, '/'),
-              filePath
-            )
-          );
-        } else {
-          const dirName =
-            aliOssFileConfig.dir.local.split(path.sep).pop() || '';
-          const ignoreDir = aliOssFileConfig.dir.ignoreDir;
-          const ossFlieName =
-            aliOssConfig.prefix +
-            filePath.replace(
-              aliOssFileConfig.dir.local,
-              ignoreDir ? '' : path.sep + dirName
+        if (aliOssFileConfig.file) {
+          if (aliOssFileConfig.file.local.includes(filePath)) {
+            const filename = filePath.split(path.sep).pop() || '';
+            const ossFlieName = path.join(aliOssConfig.prefix, filename);
+            uploadQueue.addTask(() =>
+              put(
+                path.sep === '/'
+                  ? ossFlieName
+                  : ossFlieName.replace(/\\/g, '/'),
+                filePath
+              )
             );
-          uploadQueue.addTask(() =>
-            put(
-              path.sep === '/' ? ossFlieName : ossFlieName.replace(/\\/g, '/'),
-              filePath
-            )
-          );
+          } else {
+            if (aliOssFileConfig.dir) {
+              const dirName =
+                aliOssFileConfig.dir.local.split(path.sep).pop() || '';
+              const ignoreDir = aliOssFileConfig.dir.ignoreDir;
+              const ossFlieName =
+                aliOssConfig.prefix +
+                filePath.replace(
+                  aliOssFileConfig.dir.local,
+                  ignoreDir ? '' : path.sep + dirName
+                );
+              uploadQueue.addTask(() =>
+                put(
+                  path.sep === '/'
+                    ? ossFlieName
+                    : ossFlieName.replace(/\\/g, '/'),
+                  filePath
+                )
+              );
+            }
+          }
         }
       });
     });

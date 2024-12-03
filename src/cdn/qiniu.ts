@@ -4,7 +4,12 @@ import path from 'path';
 import qiniu from 'qiniu';
 
 import { BilldDeploy } from '../interface';
-import { chalkERROR, chalkINFO, chalkSUCCESS } from '../utils/chalkTip';
+import {
+  chalkERROR,
+  chalkINFO,
+  chalkSUCCESS,
+  chalkWARN,
+} from '../utils/chalkTip';
 import Queue from '../utils/queue';
 
 export const handleQiniuCDN = function (data: BilldDeploy) {
@@ -60,13 +65,21 @@ export const handleQiniuCDN = function (data: BilldDeploy) {
     const uploadErrRecord = new Map(); // 上传失败记录
     const allFile: string[] = []; // 所有需要上传的文件
 
-    // 添加qiniuFileConfig目录
-    allFile.push(...findFile(qiniuFileConfig.dir.local));
+    if (qiniuFileConfig.dir) {
+      // 添加qiniuFileConfig目录
+      allFile.push(...findFile(qiniuFileConfig.dir.local));
+    } else {
+      console.log(chalkWARN('没有配置上传本地目录到qiniu目录'));
+    }
 
-    qiniuFileConfig.file.local.forEach((item) => {
-      // 添加qiniuFileConfig的文件
-      allFile.push(item);
-    });
+    if (qiniuFileConfig.file) {
+      qiniuFileConfig.file.local.forEach((item) => {
+        // 添加qiniuFileConfig的文件
+        allFile.push(item);
+      });
+    } else {
+      console.log(chalkWARN('没有配置上传本地文件到qiniu目录'));
+    }
 
     // eslint-disable-next-line
     async function put(key, filePath) {
@@ -148,24 +161,29 @@ export const handleQiniuCDN = function (data: BilldDeploy) {
         done: () => resolve('all done~'),
       });
       allFile.forEach((filePath) => {
-        if (qiniuFileConfig.file.local.includes(filePath)) {
-          const filename = filePath.split(path.sep).pop() || '';
-          const key = path.join(qiniuConfig.prefix, filename);
-          uploadQueue.addTask(() =>
-            put(path.sep === '/' ? key : key.replace(/\\/g, '/'), filePath)
-          );
-        } else {
-          const dirName = qiniuFileConfig.dir.local.split(path.sep).pop() || '';
-          const ignoreDir = qiniuFileConfig.dir.ignoreDir;
-          const key =
-            qiniuConfig.prefix +
-            filePath.replace(
-              qiniuFileConfig.dir.local,
-              ignoreDir ? '' : path.sep + dirName
+        if (qiniuFileConfig.file) {
+          if (qiniuFileConfig.file.local.includes(filePath)) {
+            const filename = filePath.split(path.sep).pop() || '';
+            const key = path.join(qiniuConfig.prefix, filename);
+            uploadQueue.addTask(() =>
+              put(path.sep === '/' ? key : key.replace(/\\/g, '/'), filePath)
             );
-          uploadQueue.addTask(() =>
-            put(path.sep === '/' ? key : key.replace(/\\/g, '/'), filePath)
-          );
+          } else {
+            if (qiniuFileConfig.dir) {
+              const dirName =
+                qiniuFileConfig.dir.local.split(path.sep).pop() || '';
+              const ignoreDir = qiniuFileConfig.dir.ignoreDir;
+              const key =
+                qiniuConfig.prefix +
+                filePath.replace(
+                  qiniuFileConfig.dir.local,
+                  ignoreDir ? '' : path.sep + dirName
+                );
+              uploadQueue.addTask(() =>
+                put(path.sep === '/' ? key : key.replace(/\\/g, '/'), filePath)
+              );
+            }
+          }
         }
       });
     });
