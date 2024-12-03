@@ -86,12 +86,12 @@ export interface IBilldDeployConfig {
 
   /** 上传到ssh的文件、目录 */
   sshFileConfig?: (data: BilldDeploy) => {
-    dir: {
+    dir?: {
       local: string;
       remote: string;
       ignoreDir?: boolean;
     };
-    file: {
+    file?: {
       local: string[];
       remote: string;
     };
@@ -99,11 +99,11 @@ export interface IBilldDeployConfig {
 
   /** 上传到阿里云oss的文件、目录 */
   aliOssFileConfig?: (data: BilldDeploy) => {
-    dir: {
+    dir?: {
       local: string;
       ignoreDir?: boolean;
     };
-    file: {
+    file?: {
       local: string[];
     };
   };
