@@ -1,3 +1,12 @@
+# [1.2.0](https://github.com/galaxy-s10/billd-deploy/compare/v1.1.1...v1.2.0) (2025-01-04)
+
+
+### fix
+
+* 命名规范 ([abaaad3](https://github.com/galaxy-s10/billd-deploy/commit/abaaad3f6c504fec4620b3d6a850cc1fe1591e62))
+
+
+
 ## [1.1.1](https://github.com/galaxy-s10/billd-deploy/compare/v1.1.0...v1.1.1) (2025-01-04)
 
 
