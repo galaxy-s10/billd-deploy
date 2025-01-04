@@ -15,7 +15,10 @@ import Queue from '../utils/queue';
 export const handleAliOssCDN = function (data: BilldDeploy) {
   const { aliOssConfig: cdnConfig, aliOssFileConfig: cdnFileConfig } =
     data.config;
-  if (!cdnConfig || !cdnFileConfig) return;
+  if (!cdnConfig || !cdnFileConfig) {
+    console.log(chalkERROR(`CDN配置错误！`));
+    return;
+  }
 
   const aliOssConfig = cdnConfig(data);
   const aliOssFileConfig = cdnFileConfig(data);

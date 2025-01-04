@@ -15,7 +15,10 @@ import Queue from '../utils/queue';
 export const handleHuaweiObsCDN = function (data: BilldDeploy) {
   const { huaweiObsConfig: cdnConfig, huaweiObsFileConfig: cdnFileConfig } =
     data.config;
-  if (!cdnConfig || !cdnFileConfig) return;
+  if (!cdnConfig || !cdnFileConfig) {
+    console.log(chalkERROR(`CDN配置错误！`));
+    return;
+  }
 
   const huaweiObsConfig = cdnConfig(data);
   const huaweiObsFileConfig = cdnFileConfig(data);

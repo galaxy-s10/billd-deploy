@@ -37,7 +37,7 @@ export interface IHuaweiObsConfig {
   prefix: string;
 }
 
-export interface IQiniuConfig {
+export interface IQiniuKodoConfig {
   accessKey: string;
   secretKey: string;
   bucket: string;
@@ -82,7 +82,7 @@ export interface IBilldDeployConfig {
   tencentCosConfig?: (data: BilldDeploy) => ITencentCosConfig;
 
   /** 七牛云配置 */
-  qiniuConfig?: (data: BilldDeploy) => IQiniuConfig;
+  qiniuKodoConfig?: (data: BilldDeploy) => IQiniuKodoConfig;
 
   /** 上传到ssh的文件、目录 */
   sshFileConfig?: (data: BilldDeploy) => {
@@ -131,7 +131,7 @@ export interface IBilldDeployConfig {
   };
 
   /** 上传到七牛云的文件、目录 */
-  qiniuFileConfig?: (data: BilldDeploy) => {
+  qiniuKodoFileConfig?: (data: BilldDeploy) => {
     dir?: {
       local: string;
       ignoreDir?: boolean;

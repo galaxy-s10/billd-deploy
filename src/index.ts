@@ -1,7 +1,7 @@
 import { handleBuild } from './build';
 import { handleAliOssCDN } from './cdn/ali-oss';
 import { handleHuaweiObsCDN } from './cdn/huawei-obs';
-import { handleQiniuCDN } from './cdn/qiniu';
+import { handleQiniuKodoCDN } from './cdn/qiniu-kodo';
 import { handleTencentOssCDN } from './cdn/tencent-cos';
 import { BilldDeploy, CdnEnum, EnvEnum } from './interface';
 import { handleRelease } from './release';
@@ -51,7 +51,7 @@ export const deploy = async function (data: BilldDeploy) {
           await handleAliOssCDN(data);
           break;
         case CdnEnum.qiniu:
-          await handleQiniuCDN(data);
+          await handleQiniuKodoCDN(data);
           break;
         case CdnEnum.tencent:
           await handleTencentOssCDN(data);

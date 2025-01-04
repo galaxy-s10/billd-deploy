@@ -13,7 +13,7 @@
 </h1>
 
 <p align="center">
-部署脚本,支持阿里云oss、腾讯云cos、华为云obs、七牛云
+部署脚本,支持阿里云oss、腾讯云cos、华为云obs、七牛云kodo
 </p>
 
 <div align="center">
@@ -71,9 +71,9 @@ const myconfig = {
     // 这个data就是你传入deploy的配置,即myconfig
     aliOssFileConfig: (data) => {},
     // 这个data就是你传入deploy的配置,即myconfig
-    qiniuConfig: (data) => {},
+    qiniuKodoConfig: (data) => {},
     // 这个data就是你传入deploy的配置,即myconfig
-    qiniuFileConfig: (data) => {},
+    qiniuKodoFileConfig: (data) => {},
   },
 };
 deploy(myconfig);
@@ -104,9 +104,9 @@ const myconfig = {
     // 这个data就是你传入deploy的配置,即myconfig
     aliOssFileConfig: (data) => {},
     // 这个data就是你传入deploy的配置,即myconfig
-    qiniuConfig: (data) => {},
+    qiniuKodoConfig: (data) => {},
     // 这个data就是你传入deploy的配置,即myconfig
-    qiniuFileConfig: (data) => {},
+    qiniuKodoFileConfig: (data) => {},
   },
 };
 deploy(myconfig);
@@ -139,9 +139,9 @@ config 里面的所有配置项都需要返回特定的配置,具体请看：
     // 这个data就是你传入deploy的配置,即myconfig
     aliOssFileConfig: (data) => {},
     // 这个data就是你传入deploy的配置,即myconfig
-    qiniuConfig: (data) => {},
+    qiniuKodoConfig: (data) => {},
     // 这个data就是你传入deploy的配置,即myconfig
-    qiniuFileConfig: (data) => {},
+    qiniuKodoFileConfig: (data) => {},
   },
 }
 ```

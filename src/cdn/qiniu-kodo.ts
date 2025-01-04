@@ -12,22 +12,25 @@ import {
 } from '../utils/chalkTip';
 import Queue from '../utils/queue';
 
-export const handleQiniuCDN = function (data: BilldDeploy) {
-  const { qiniuConfig: cdnConfig, qiniuFileConfig: cdnFileConfig } =
+export const handleQiniuKodoCDN = function (data: BilldDeploy) {
+  const { qiniuKodoConfig: cdnConfig, qiniuKodoFileConfig: cdnFileConfig } =
     data.config;
-  if (!cdnConfig || !cdnFileConfig) return;
+  if (!cdnConfig || !cdnFileConfig) {
+    console.log(chalkERROR(`CDN配置错误！`));
+    return;
+  }
 
-  const qiniuConfig = cdnConfig(data);
-  const qiniuFileConfig = cdnFileConfig(data);
+  const qiniuKodoConfig = cdnConfig(data);
+  const qiniuKodoFileConfig = cdnFileConfig(data);
 
   // https://developer.qiniu.com/kodo/1289/nodejs
   const mac = new qiniu.auth.digest.Mac(
-    qiniuConfig.accessKey,
-    qiniuConfig.secretKey
+    qiniuKodoConfig.accessKey,
+    qiniuKodoConfig.secretKey
   );
   const qiniuConfConfig = new qiniu.conf.Config();
   // @ts-ignore
-  qiniuConfConfig.zone = qiniuConfig.zone;
+  qiniuConfConfig.zone = qiniuKodoConfig.zone;
 
   function findFile(inputDir) {
     const res: string[] = [];
@@ -65,16 +68,16 @@ export const handleQiniuCDN = function (data: BilldDeploy) {
     const uploadErrRecord = new Map(); // 上传失败记录
     const allFile: string[] = []; // 所有需要上传的文件
 
-    if (qiniuFileConfig.dir) {
-      // 添加qiniuFileConfig目录
-      allFile.push(...findFile(qiniuFileConfig.dir.local));
+    if (qiniuKodoFileConfig.dir) {
+      // 添加qiniuKodoFileConfig目录
+      allFile.push(...findFile(qiniuKodoFileConfig.dir.local));
     } else {
       console.log(chalkWARN('没有配置上传本地目录到qiniu目录'));
     }
 
-    if (qiniuFileConfig.file) {
-      qiniuFileConfig.file.local.forEach((item) => {
-        // 添加qiniuFileConfig的文件
+    if (qiniuKodoFileConfig.file) {
+      qiniuKodoFileConfig.file.local.forEach((item) => {
+        // 添加qiniuKodoFileConfig的文件
         allFile.push(item);
       });
     } else {
@@ -87,7 +90,7 @@ export const handleQiniuCDN = function (data: BilldDeploy) {
         const formUploader = new qiniu.form_up.FormUploader(qiniuConfConfig);
         const options = {
           // eslint-disable-next-line
-          scope: `${qiniuConfig.bucket}:${key}`,
+          scope: `${qiniuKodoConfig.bucket}:${key}`,
         };
         const putPolicy = new qiniu.rs.PutPolicy(options);
         const uploadToken = putPolicy.uploadToken(mac);
@@ -161,22 +164,22 @@ export const handleQiniuCDN = function (data: BilldDeploy) {
         done: () => resolve('all done~'),
       });
       allFile.forEach((filePath) => {
-        if (qiniuFileConfig.file) {
-          if (qiniuFileConfig.file.local.includes(filePath)) {
+        if (qiniuKodoFileConfig.file) {
+          if (qiniuKodoFileConfig.file.local.includes(filePath)) {
             const filename = filePath.split(path.sep).pop() || '';
-            const key = path.join(qiniuConfig.prefix, filename);
+            const key = path.join(qiniuKodoConfig.prefix, filename);
             uploadQueue.addTask(() =>
               put(path.sep === '/' ? key : key.replace(/\\/g, '/'), filePath)
             );
           } else {
-            if (qiniuFileConfig.dir) {
+            if (qiniuKodoFileConfig.dir) {
               const dirName =
-                qiniuFileConfig.dir.local.split(path.sep).pop() || '';
-              const ignoreDir = qiniuFileConfig.dir.ignoreDir;
+                qiniuKodoFileConfig.dir.local.split(path.sep).pop() || '';
+              const ignoreDir = qiniuKodoFileConfig.dir.ignoreDir;
               const key =
-                qiniuConfig.prefix +
+                qiniuKodoConfig.prefix +
                 filePath.replace(
-                  qiniuFileConfig.dir.local,
+                  qiniuKodoFileConfig.dir.local,
                   ignoreDir ? '' : path.sep + dirName
                 );
               uploadQueue.addTask(() =>

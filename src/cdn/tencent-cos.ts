@@ -15,7 +15,10 @@ import Queue from '../utils/queue';
 export const handleTencentOssCDN = function (data: BilldDeploy) {
   const { tencentCosConfig: cdnConfig, tencentCosFileConfig: cdnFileConfig } =
     data.config;
-  if (!cdnConfig || !cdnFileConfig) return;
+  if (!cdnConfig || !cdnFileConfig) {
+    console.log(chalkERROR(`CDN配置错误！`));
+    return;
+  }
 
   const tencentCosConfig = cdnConfig(data);
   const tencentCosFileConfig = cdnFileConfig(data);
