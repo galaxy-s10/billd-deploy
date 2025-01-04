@@ -7,7 +7,7 @@ import { BilldDeploy, CdnEnum, EnvEnum } from './interface';
 import { handleRelease } from './release';
 import { handleSSH } from './ssh';
 import { calculateRemainingTime } from './utils';
-import { chalkERROR, chalkSUCCESS } from './utils/chalkTip';
+import { chalkERROR, chalkSUCCESS, chalkWARN } from './utils/chalkTip';
 import { deleteDeployFile, generateDeployFile } from './utils/git';
 import { handlePm2Tip } from './utils/pm2Tip';
 
@@ -41,21 +41,25 @@ export const deploy = async function (data: BilldDeploy) {
     }
     handleBuild(data);
     generateDeployFile();
-    switch (config.cdn(data)) {
-      case CdnEnum.huawei:
-        await handleHuaweiObsCDN(data);
-        break;
-      case CdnEnum.ali:
-        await handleAliOssCDN(data);
-        break;
-      case CdnEnum.qiniu:
-        await handleQiniuCDN(data);
-        break;
-      case CdnEnum.tencent:
-        await handleTencentOssCDN(data);
-        break;
+    if (config.cdn(data)) {
+      console.log(chalkWARN('配置了CDN,开始执行CDN操作'));
+      switch (config.cdn(data)) {
+        case CdnEnum.huawei:
+          await handleHuaweiObsCDN(data);
+          break;
+        case CdnEnum.ali:
+          await handleAliOssCDN(data);
+          break;
+        case CdnEnum.qiniu:
+          await handleQiniuCDN(data);
+          break;
+        case CdnEnum.tencent:
+          await handleTencentOssCDN(data);
+          break;
+      }
     }
     if (config.ssh(data)) {
+      console.log(chalkWARN('配置了SSH,开始执行SSH操作'));
       await handleSSH(data);
     }
     deleteDeployFile();
