@@ -1,12 +1,15 @@
 import { execSync } from 'child_process';
 
-import { BilldDeploy } from './interface';
-import { chalkSUCCESS } from './utils/chalkTip';
+import { chalkERROR, chalkSUCCESS } from './utils/chalkTip';
 
-export const handleBuild = (data: BilldDeploy) => {
-  execSync(`npm run build:${data.env === 'prod' ? 'prod' : 'beta'}`, {
+export const handleBuild = (buildCmd = '') => {
+  if (buildCmd === '') {
+    console.log(chalkERROR(`buildCmd为空！`));
+    return;
+  }
+  execSync(buildCmd, {
     stdio: 'inherit',
     cwd: process.cwd(),
   });
-  console.log(chalkSUCCESS(`构建${data.env}完成`));
+  console.log(chalkSUCCESS(`构建完成`));
 };

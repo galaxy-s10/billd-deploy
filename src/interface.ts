@@ -46,11 +46,6 @@ export interface IQiniuKodoConfig {
   zone: string;
 }
 
-export enum EnvEnum {
-  prod = 'prod',
-  beta = 'beta',
-}
-
 export enum CdnEnum {
   ali = 'ali',
   huawei = 'huawei',
@@ -60,7 +55,6 @@ export enum CdnEnum {
 }
 
 export type CdnType = keyof typeof CdnEnum;
-export type EnvType = keyof typeof EnvEnum;
 
 export interface IBilldDeployConfig {
   /** 使用哪个cdn */
@@ -143,8 +137,10 @@ export interface IBilldDeployConfig {
 }
 
 export interface BilldDeploy {
-  env: EnvType;
+  shouldBuild?: boolean;
+  buildCmd?: string;
   config: IBilldDeployConfig;
   verifyGit?: boolean;
   shouldRelease?: boolean;
+  deployDoneCb?: (data: { err: boolean }) => void;
 }

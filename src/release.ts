@@ -112,7 +112,7 @@ function diffRemote() {
   });
 }
 
-export const handleRelease = async (verifyGit = true, shouldRelease = true) => {
+export const handleRelease = async (verifyGit, shouldRelease) => {
   if (verifyGit) {
     await isInstalledGit();
     await gitIsClean();

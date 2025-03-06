@@ -3,7 +3,7 @@ import { handleAliOssCDN } from './cdn/ali-oss';
 import { handleHuaweiObsCDN } from './cdn/huawei-obs';
 import { handleQiniuKodoCDN } from './cdn/qiniu-kodo';
 import { handleTencentOssCDN } from './cdn/tencent-cos';
-import { BilldDeploy, CdnEnum, EnvEnum } from './interface';
+import { BilldDeploy, CdnEnum } from './interface';
 import { handleRelease } from './release';
 import { handleSSH } from './ssh';
 import { calculateRemainingTime } from './utils';
@@ -15,15 +15,16 @@ export * from './interface';
 
 export const deploy = async function (data: BilldDeploy) {
   const startTime = new Date().getTime();
-  const { env, config, verifyGit, shouldRelease } = data;
-  if (!config || !env) {
-    console.log(chalkERROR('缺少env或config！'));
-    return;
-  }
-
-  const allowEnv = Object.keys(EnvEnum);
-  if (!allowEnv.includes(env)) {
-    console.log(chalkERROR(`env错误, env必须是: ${allowEnv.toString()}之一`));
+  const {
+    shouldBuild = true,
+    buildCmd,
+    verifyGit = true,
+    shouldRelease = true,
+    config,
+    deployDoneCb,
+  } = data;
+  if (!config) {
+    console.log(chalkERROR('缺少config！'));
     return;
   }
 
@@ -36,10 +37,11 @@ export const deploy = async function (data: BilldDeploy) {
   }
 
   try {
-    if (env === 'prod') {
-      await handleRelease(verifyGit, shouldRelease);
+    await handleRelease(verifyGit, shouldRelease);
+    if (shouldBuild) {
+      console.log(chalkWARN('配置了打包,开始执行打包命令'));
+      handleBuild(buildCmd);
     }
-    handleBuild(data);
     generateDeployFile();
     if (config.cdn(data)) {
       console.log(chalkWARN('配置了CDN,开始执行CDN操作'));
@@ -67,13 +69,15 @@ export const deploy = async function (data: BilldDeploy) {
     handlePm2Tip(data);
     console.log(
       chalkSUCCESS(
-        `构建${env}成功，总耗时：${calculateRemainingTime({
+        `构建成功，总耗时：${calculateRemainingTime({
           startTime,
           endTime,
         })}`
       )
     );
+    deployDoneCb?.({ err: false });
   } catch (error) {
-    console.log(chalkERROR(`构建${env}出错`), error);
+    console.log(chalkERROR(`构建出错`), error);
+    deployDoneCb?.({ err: true });
   }
 };
