@@ -1,3 +1,12 @@
+# [2.0.0](https://github.com/galaxy-s10/billd-deploy/compare/v1.2.0...v2.0.0) (2025-03-06)
+
+
+### feat
+
+* 优化架构 ([c27c8ad](https://github.com/galaxy-s10/billd-deploy/commit/c27c8ad582f48ccc50bb5420165a9974262bb228))
+
+
+
 # [1.2.0](https://github.com/galaxy-s10/billd-deploy/compare/v1.1.1...v1.2.0) (2025-01-04)
 
 
