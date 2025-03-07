@@ -12,16 +12,16 @@ import {
 } from '../utils/chalkTip';
 import Queue from '../utils/queue';
 
-export const handleQiniuKodoCDN = function (data: BilldDeploy) {
-  const { qiniuKodoConfig: cdnConfig, qiniuKodoFileConfig: cdnFileConfig } =
+export const handleQiniuKodo = function (data: BilldDeploy) {
+  const { qiniuKodoConfig: cosConfig, qiniuKodoFileConfig: cosFileConfig } =
     data.config;
-  if (!cdnConfig || !cdnFileConfig) {
-    console.log(chalkERROR(`CDN配置错误！`));
+  if (!cosConfig || !cosFileConfig) {
+    console.log(chalkERROR(`七牛云kodo配置错误！`));
     return;
   }
 
-  const qiniuKodoConfig = cdnConfig(data);
-  const qiniuKodoFileConfig = cdnFileConfig(data);
+  const qiniuKodoConfig = cosConfig(data);
+  const qiniuKodoFileConfig = cosFileConfig(data);
 
   // https://developer.qiniu.com/kodo/1289/nodejs
   const mac = new qiniu.auth.digest.Mac(

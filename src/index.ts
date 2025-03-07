@@ -1,9 +1,11 @@
+import { CdnEnum } from 'dist';
 import { handleBuild } from './build';
-import { handleAliOssCDN } from './cdn/ali-oss';
-import { handleHuaweiObsCDN } from './cdn/huawei-obs';
-import { handleQiniuKodoCDN } from './cdn/qiniu-kodo';
-import { handleTencentOssCDN } from './cdn/tencent-cos';
-import { BilldDeploy, CdnEnum } from './interface';
+import { handleTencentCdn } from './cdn/tencent';
+import { handleAliOss } from './cos/ali-oss';
+import { handleHuaweiObs } from './cos/huawei-obs';
+import { handleQiniuKodo } from './cos/qiniu-kodo';
+import { handleTencentCos } from './cos/tencent-cos';
+import { BilldDeploy, CosEnum } from './interface';
 import { handleRelease } from './release';
 import { handleSSH } from './ssh';
 import { calculateRemainingTime } from './utils';
@@ -28,12 +30,16 @@ export const deploy = async function (data: BilldDeploy) {
     return;
   }
 
-  const allowCdn = Object.keys(CdnEnum);
-  if (!allowCdn.includes(config.cdn(data))) {
-    console.log(
-      chalkERROR(`config.cdn错误, config.cdn必须是: ${allowCdn.toString()}之一`)
-    );
-    return;
+  if (config.cos) {
+    const allowCos = Object.keys(CosEnum);
+    if (!allowCos.includes(config.cos(data))) {
+      console.log(
+        chalkERROR(
+          `config.cos错误, config.cos必须是: ${allowCos.toString()}之一`
+        )
+      );
+      return;
+    }
   }
 
   try {
@@ -43,24 +49,33 @@ export const deploy = async function (data: BilldDeploy) {
       handleBuild(buildCmd);
     }
     generateDeployFile();
-    if (config.cdn(data)) {
-      console.log(chalkWARN('配置了CDN,开始执行CDN操作'));
-      switch (config.cdn(data)) {
-        case CdnEnum.huawei:
-          await handleHuaweiObsCDN(data);
+
+    if (config.cos && config.cos(data)) {
+      console.log(chalkWARN('配置了cos对象存储,开始执行cos对象存储操作'));
+      switch (config.cos(data)) {
+        case CosEnum.huawei:
+          await handleHuaweiObs(data);
           break;
-        case CdnEnum.ali:
-          await handleAliOssCDN(data);
+        case CosEnum.ali:
+          await handleAliOss(data);
           break;
-        case CdnEnum.qiniu:
-          await handleQiniuKodoCDN(data);
+        case CosEnum.qiniu:
+          await handleQiniuKodo(data);
           break;
-        case CdnEnum.tencent:
-          await handleTencentOssCDN(data);
+        case CosEnum.tencent:
+          await handleTencentCos(data);
           break;
       }
     }
-    if (config.ssh(data)) {
+    if (config.cdn && config.cdn(data)) {
+      console.log(chalkWARN('配置了cdn内容分发,开始执行cdn内容分发操作'));
+      switch (config.cdn(data)) {
+        case CdnEnum.tencent:
+          await handleTencentCdn(data);
+          break;
+      }
+    }
+    if (config.ssh && config.ssh(data)) {
       console.log(chalkWARN('配置了SSH,开始执行SSH操作'));
       await handleSSH(data);
     }

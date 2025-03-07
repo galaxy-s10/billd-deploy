@@ -12,16 +12,16 @@ import {
 } from '../utils/chalkTip';
 import Queue from '../utils/queue';
 
-export const handleTencentOssCDN = function (data: BilldDeploy) {
-  const { tencentCosConfig: cdnConfig, tencentCosFileConfig: cdnFileConfig } =
+export const handleTencentCos = function (data: BilldDeploy) {
+  const { tencentCosConfig: cosConfig, tencentCosFileConfig: cosFileConfig } =
     data.config;
-  if (!cdnConfig || !cdnFileConfig) {
-    console.log(chalkERROR(`CDN配置错误！`));
+  if (!cosConfig || !cosFileConfig) {
+    console.log(chalkERROR(`腾讯云cos配置错误！`));
     return;
   }
 
-  const tencentCosConfig = cdnConfig(data);
-  const tencentCosFileConfig = cdnFileConfig(data);
+  const tencentCosConfig = cosConfig(data);
+  const tencentCosFileConfig = cosFileConfig(data);
 
   function findFile(inputDir) {
     const res: string[] = [];

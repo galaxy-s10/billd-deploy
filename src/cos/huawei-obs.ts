@@ -12,16 +12,16 @@ import {
 } from '../utils/chalkTip';
 import Queue from '../utils/queue';
 
-export const handleHuaweiObsCDN = function (data: BilldDeploy) {
-  const { huaweiObsConfig: cdnConfig, huaweiObsFileConfig: cdnFileConfig } =
+export const handleHuaweiObs = function (data: BilldDeploy) {
+  const { huaweiObsConfig: cosConfig, huaweiObsFileConfig: cosFileConfig } =
     data.config;
-  if (!cdnConfig || !cdnFileConfig) {
-    console.log(chalkERROR(`CDN配置错误！`));
+  if (!cosConfig || !cosFileConfig) {
+    console.log(chalkERROR(`华为云obs配置错误！`));
     return;
   }
 
-  const huaweiObsConfig = cdnConfig(data);
-  const huaweiObsFileConfig = cdnFileConfig(data);
+  const huaweiObsConfig = cosConfig(data);
+  const huaweiObsFileConfig = cosFileConfig(data);
   const { bucket: obsBucket, prefix: obsPrefix } = huaweiObsConfig;
 
   function findFile(inputDir) {

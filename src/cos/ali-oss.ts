@@ -12,16 +12,16 @@ import {
 } from '../utils/chalkTip';
 import Queue from '../utils/queue';
 
-export const handleAliOssCDN = function (data: BilldDeploy) {
-  const { aliOssConfig: cdnConfig, aliOssFileConfig: cdnFileConfig } =
+export const handleAliOss = function (data: BilldDeploy) {
+  const { aliOssConfig: cosConfig, aliOssFileConfig: cosFileConfig } =
     data.config;
-  if (!cdnConfig || !cdnFileConfig) {
-    console.log(chalkERROR(`CDN配置错误！`));
+  if (!cosConfig || !cosFileConfig) {
+    console.log(chalkERROR(`阿里云oss配置错误！`));
     return;
   }
 
-  const aliOssConfig = cdnConfig(data);
-  const aliOssFileConfig = cdnFileConfig(data);
+  const aliOssConfig = cosConfig(data);
+  const aliOssFileConfig = cosFileConfig(data);
 
   function findFile(inputDir) {
     const res: string[] = [];

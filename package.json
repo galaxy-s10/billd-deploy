@@ -47,7 +47,8 @@
     "inquirer": "^8.2.4",
     "node-ssh": "^13.0.1",
     "qiniu": "^7.8.0",
-    "semver": "^7.3.7"
+    "semver": "^7.3.7",
+    "tencentcloud-sdk-nodejs-cdn": "^4.0.1029"
   },
   "devDependencies": {
     "@babel/core": "^7.21.0",

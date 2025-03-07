@@ -1,4 +1,8 @@
 import { StorageClass } from 'cos-nodejs-sdk-v5';
+import {
+  PurgePathCacheRequest,
+  PurgeUrlsCacheRequest,
+} from 'tencentcloud-sdk-nodejs-cdn/tencentcloud/services/cdn/v20180606/cdn_models';
 
 export interface ISSHConfig {
   host: string;
@@ -13,6 +17,11 @@ export interface ITencentCosConfig {
   Region: string;
   StorageClass: StorageClass;
   prefix?: string;
+}
+
+export interface ITencentCdnConfig {
+  SecretId: string;
+  SecretKey: string;
 }
 
 export interface IAliOssConfig {
@@ -46,7 +55,7 @@ export interface IQiniuKodoConfig {
   zone: string;
 }
 
-export enum CdnEnum {
+export enum CosEnum {
   ali = 'ali',
   huawei = 'huawei',
   qiniu = 'qiniu',
@@ -54,14 +63,22 @@ export enum CdnEnum {
   none = 'none',
 }
 
-export type CdnType = keyof typeof CdnEnum;
+export enum CdnEnum {
+  tencent = 'tencent',
+  none = 'none',
+}
+
+export type CosType = keyof typeof CosEnum;
 
 export interface IBilldDeployConfig {
+  /** 使用哪个对象存储 */
+  cos?: (data: BilldDeploy) => CosEnum;
+
   /** 使用哪个cdn */
-  cdn: (data: BilldDeploy) => CdnType;
+  cdn?: (data: BilldDeploy) => CdnEnum;
 
   /** 是否使用ssh */
-  ssh: (data: BilldDeploy) => boolean;
+  ssh?: (data: BilldDeploy) => boolean;
 
   /** ssh配置 */
   sshConfig?: (data: BilldDeploy) => ISSHConfig;
@@ -78,18 +95,7 @@ export interface IBilldDeployConfig {
   /** 七牛云配置 */
   qiniuKodoConfig?: (data: BilldDeploy) => IQiniuKodoConfig;
 
-  /** 上传到ssh的文件、目录 */
-  sshFileConfig?: (data: BilldDeploy) => {
-    dir?: {
-      local: string;
-      remote: string;
-      ignoreDir?: boolean;
-    };
-    file?: {
-      local: string[];
-      remote: string;
-    };
-  };
+  tencentCdnConfig?: (data: BilldDeploy) => ITencentCdnConfig;
 
   /** 上传到阿里云oss的文件、目录 */
   aliOssFileConfig?: (data: BilldDeploy) => {
@@ -134,13 +140,36 @@ export interface IBilldDeployConfig {
       local: string[];
     };
   };
+
+  /** 上传到ssh的文件、目录 */
+  sshFileConfig?: (data: BilldDeploy) => {
+    dir?: {
+      local: string;
+      remote: string;
+      ignoreDir?: boolean;
+    };
+    file?: {
+      local: string[];
+      remote: string;
+    };
+  };
+
+  /** 腾讯云cdn操作 */
+  tencentCdnJob?: (data: BilldDeploy) => {
+    Purge: {
+      /** URL刷新 */
+      urls?: PurgeUrlsCacheRequest;
+      /** 目录刷新 */
+      paths?: PurgePathCacheRequest;
+    };
+  };
 }
 
 export interface BilldDeploy {
-  shouldBuild?: boolean;
-  buildCmd?: string;
   config: IBilldDeployConfig;
   verifyGit?: boolean;
   shouldRelease?: boolean;
+  shouldBuild?: boolean;
+  buildCmd?: string;
   deployDoneCb?: (data: { err: boolean }) => void;
 }
