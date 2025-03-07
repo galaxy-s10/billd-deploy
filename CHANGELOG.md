@@ -1,3 +1,12 @@
+# [2.1.0](https://github.com/galaxy-s10/billd-deploy/compare/v2.0.0...v2.1.0) (2025-03-07)
+
+
+### feat
+
+* cdn ([cc3de8e](https://github.com/galaxy-s10/billd-deploy/commit/cc3de8e36d8c5518612d849f6a53fcf43c81a97c))
+
+
+
 # [2.0.0](https://github.com/galaxy-s10/billd-deploy/compare/v1.2.0...v2.0.0) (2025-03-06)
 
 
