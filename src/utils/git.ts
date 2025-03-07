@@ -8,7 +8,7 @@ import { chalkSUCCESS } from './chalkTip';
 export const generateDeployFile = () => {
   fs.writeFileSync(
     path.resolve(process.cwd(), 'deploy.json'),
-    JSON.stringify(logData(), {}, 2)
+    JSON.stringify(logData(), null, 2)
   );
   console.log(chalkSUCCESS(`生成临时deploy.json文件完成`));
 };

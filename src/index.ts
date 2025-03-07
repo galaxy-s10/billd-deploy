@@ -1,11 +1,10 @@
-import { CdnEnum } from 'dist';
 import { handleBuild } from './build';
 import { handleTencentCdn } from './cdn/tencent';
 import { handleAliOss } from './cos/ali-oss';
 import { handleHuaweiObs } from './cos/huawei-obs';
 import { handleQiniuKodo } from './cos/qiniu-kodo';
 import { handleTencentCos } from './cos/tencent-cos';
-import { BilldDeploy, CosEnum } from './interface';
+import { BilldDeploy, CdnEnum, CosEnum } from './interface';
 import { handleRelease } from './release';
 import { handleSSH } from './ssh';
 import { calculateRemainingTime } from './utils';
