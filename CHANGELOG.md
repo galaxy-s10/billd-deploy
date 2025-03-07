@@ -1,3 +1,12 @@
+# [2.2.0](https://github.com/galaxy-s10/billd-deploy/compare/v2.1.0...v2.2.0) (2025-03-07)
+
+
+### fix
+
+* json ([210d4ff](https://github.com/galaxy-s10/billd-deploy/commit/210d4ff53200161c3894a003ca0149a5ed9f0753))
+
+
+
 # [2.1.0](https://github.com/galaxy-s10/billd-deploy/compare/v2.0.0...v2.1.0) (2025-03-07)
 
 
