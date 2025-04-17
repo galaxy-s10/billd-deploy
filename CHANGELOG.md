@@ -1,3 +1,12 @@
+## [2.3.1](https://github.com/galaxy-s10/billd-deploy/compare/v2.3.0...v2.3.1) (2025-04-17)
+
+
+### fix
+
+* 错别字 ([de09c2d](https://github.com/galaxy-s10/billd-deploy/commit/de09c2de7d8f3d28b2fe43cac78ac6d4577bc2b8))
+
+
+
 # [2.3.0](https://github.com/galaxy-s10/billd-deploy/compare/v2.2.0...v2.3.0) (2025-04-17)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "billd-deploy",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "description": "部署脚本",
   "keywords": [
     "billd",
