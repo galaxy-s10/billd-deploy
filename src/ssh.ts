@@ -93,7 +93,7 @@ export const handleSSH = async function (data: BilldDeploy) {
         )
       );
     } else {
-      console.log(chalkWARN('没有配置上传文件目录到服务器目录'));
+      console.log(chalkWARN('没有配置上传本地文件到服务器目录'));
     }
   }
 
