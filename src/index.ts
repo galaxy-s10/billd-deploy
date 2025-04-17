@@ -15,6 +15,7 @@ import { handlePm2Tip } from './utils/pm2Tip';
 export * from './interface';
 
 export const deploy = async function (data: BilldDeploy) {
+  console.log(chalkSUCCESS(`开始部署`));
   const startTime = new Date().getTime();
   const {
     shouldBuild = true,
@@ -41,11 +42,25 @@ export const deploy = async function (data: BilldDeploy) {
     }
   }
 
+  if (config.cdn) {
+    const allowCdn = Object.keys(CdnEnum);
+    if (!allowCdn.includes(config.cdn(data))) {
+      console.log(
+        chalkERROR(
+          `config.cdn错误, config.cdn必须是: ${allowCdn.toString()}之一`
+        )
+      );
+      return;
+    }
+  }
+
   try {
     await handleRelease(verifyGit, shouldRelease);
     if (shouldBuild) {
       console.log(chalkWARN('配置了打包,开始执行打包命令'));
       handleBuild(buildCmd);
+    } else {
+      console.log(chalkWARN('没有配置打包'));
     }
     generateDeployFile();
 
@@ -65,7 +80,10 @@ export const deploy = async function (data: BilldDeploy) {
           await handleTencentCos(data);
           break;
       }
+    } else {
+      console.log(chalkWARN('没有配置对象存储'));
     }
+
     if (config.cdn && config.cdn(data)) {
       console.log(chalkWARN('配置了cdn内容分发,开始执行cdn内容分发操作'));
       switch (config.cdn(data)) {
@@ -73,17 +91,23 @@ export const deploy = async function (data: BilldDeploy) {
           await handleTencentCdn(data);
           break;
       }
+    } else {
+      console.log(chalkWARN('没有配置cdn内容分发'));
     }
+
     if (config.ssh && config.ssh(data)) {
       console.log(chalkWARN('配置了SSH,开始执行SSH操作'));
       await handleSSH(data);
+    } else {
+      console.log(chalkWARN('没有配置SSH'));
     }
+
     deleteDeployFile();
     const endTime = new Date().getTime();
     handlePm2Tip(data);
     console.log(
       chalkSUCCESS(
-        `构建成功，总耗时：${calculateRemainingTime({
+        `部署完成，总耗时：${calculateRemainingTime({
           startTime,
           endTime,
         })}`
@@ -91,7 +115,7 @@ export const deploy = async function (data: BilldDeploy) {
     );
     deployDoneCb?.({ err: false });
   } catch (error) {
-    console.log(chalkERROR(`构建出错`), error);
+    console.log(chalkERROR(`部署出错`), error);
     deployDoneCb?.({ err: true });
   }
 };
