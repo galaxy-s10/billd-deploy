@@ -1,3 +1,12 @@
+# [2.3.0](https://github.com/galaxy-s10/billd-deploy/compare/v2.2.0...v2.3.0) (2025-04-17)
+
+
+### feat
+
+* tip ([425f4f9](https://github.com/galaxy-s10/billd-deploy/commit/425f4f99fa01a2ef2fd8068cacd94c8ed775fc60))
+
+
+
 # [2.2.0](https://github.com/galaxy-s10/billd-deploy/compare/v2.1.0...v2.2.0) (2025-03-07)
 
 
