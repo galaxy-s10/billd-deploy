@@ -12,6 +12,8 @@ import {
 } from '../utils/chalkTip';
 import Queue from '../utils/queue';
 
+import { cache } from '@/utils/cache';
+
 export const handleHuaweiObs = function (data: BilldDeploy) {
   const { huaweiObsConfig: cosConfig, huaweiObsFileConfig: cosFileConfig } =
     data.config;
@@ -121,6 +123,7 @@ export const handleHuaweiObs = function (data: BilldDeploy) {
         } else {
           uploadErrRecord.set(filePath, status);
           console.log(result);
+          cache.cos = 'error';
           console.log(
             chalkERROR(
               // eslint-disable-next-line
@@ -137,10 +140,12 @@ export const handleHuaweiObs = function (data: BilldDeploy) {
           );
 
           if (uploadErrRecord.size) {
+            cache.cos = 'error';
             console.log(chalkERROR(`上传huawei-obs失败数据`), uploadErrRecord);
           }
         }
       } catch (error) {
+        cache.cos = 'error';
         console.log(chalkERROR(`上传huawei-obs错误`), error);
       }
     }

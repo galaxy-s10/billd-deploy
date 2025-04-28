@@ -12,6 +12,8 @@ import {
 } from '../utils/chalkTip';
 import Queue from '../utils/queue';
 
+import { cache } from '@/utils/cache';
+
 export const handleQiniuKodo = function (data: BilldDeploy) {
   const { qiniuKodoConfig: cosConfig, qiniuKodoFileConfig: cosFileConfig } =
     data.config;
@@ -133,6 +135,7 @@ export const handleQiniuKodo = function (data: BilldDeploy) {
         } else {
           uploadErrRecord.set(filePath, status);
           console.log(result);
+          cache.cos = 'error';
           console.log(
             chalkERROR(
               // eslint-disable-next-line
@@ -149,10 +152,12 @@ export const handleQiniuKodo = function (data: BilldDeploy) {
           );
 
           if (uploadErrRecord.size) {
+            cache.cos = 'error';
             console.log(chalkERROR(`上传qiniu失败数据`), uploadErrRecord);
           }
         }
       } catch (error) {
+        cache.cos = 'error';
         console.log(chalkERROR(`上传qiniu错误`), error);
       }
     }

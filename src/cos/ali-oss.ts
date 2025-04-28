@@ -12,6 +12,8 @@ import {
 } from '../utils/chalkTip';
 import Queue from '../utils/queue';
 
+import { cache } from '@/utils/cache';
+
 export const handleAliOss = function (data: BilldDeploy) {
   const { aliOssConfig: cosConfig, aliOssFileConfig: cosFileConfig } =
     data.config;
@@ -117,6 +119,7 @@ export const handleAliOss = function (data: BilldDeploy) {
         } else {
           uploadErrRecord.set(filePath, status);
           console.log(result);
+          cache.cos = 'error';
           console.log(
             chalkERROR(
               // eslint-disable-next-line
@@ -133,10 +136,12 @@ export const handleAliOss = function (data: BilldDeploy) {
           );
 
           if (uploadErrRecord.size) {
+            cache.cos = 'error';
             console.log(chalkERROR(`上传ali-oss失败数据`), uploadErrRecord);
           }
         }
       } catch (error) {
+        cache.cos = 'error';
         console.log(chalkERROR(`上传ali-oss错误`), error);
       }
     }
