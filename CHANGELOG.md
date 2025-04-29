@@ -1,3 +1,12 @@
+## [3.0.1](https://github.com/galaxy-s10/billd-deploy/compare/v3.0.0...v3.0.1) (2025-04-29)
+
+
+### fix
+
+* 依赖 ([a47f897](https://github.com/galaxy-s10/billd-deploy/commit/a47f8972933b9dfe366a3391ea3bb0d93b37bc12))
+
+
+
 # [3.0.0](https://github.com/galaxy-s10/billd-deploy/compare/v2.3.1...v3.0.0) (2025-04-28)
 
 
