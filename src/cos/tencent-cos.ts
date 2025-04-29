@@ -4,6 +4,7 @@ import path from 'path';
 import COS from 'cos-nodejs-sdk-v5';
 
 import { BilldDeploy } from '../interface';
+import { cache } from '../utils/cache';
 import {
   chalkERROR,
   chalkINFO,
@@ -11,8 +12,6 @@ import {
   chalkWARN,
 } from '../utils/chalkTip';
 import Queue from '../utils/queue';
-
-import { cache } from '@/utils/cache';
 
 export const handleTencentCos = function (data: BilldDeploy) {
   const { tencentCosConfig: cosConfig, tencentCosFileConfig: cosFileConfig } =

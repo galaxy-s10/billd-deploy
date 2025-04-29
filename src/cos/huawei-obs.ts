@@ -4,6 +4,7 @@ import path from 'path';
 import OBS from 'esdk-obs-nodejs';
 
 import { BilldDeploy } from '../interface';
+import { cache } from '../utils/cache';
 import {
   chalkERROR,
   chalkINFO,
@@ -11,8 +12,6 @@ import {
   chalkWARN,
 } from '../utils/chalkTip';
 import Queue from '../utils/queue';
-
-import { cache } from '@/utils/cache';
 
 export const handleHuaweiObs = function (data: BilldDeploy) {
   const { huaweiObsConfig: cosConfig, huaweiObsFileConfig: cosFileConfig } =

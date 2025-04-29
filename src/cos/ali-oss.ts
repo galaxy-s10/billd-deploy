@@ -4,6 +4,7 @@ import path from 'path';
 import OSS from 'ali-oss';
 
 import { BilldDeploy } from '../interface';
+import { cache } from '../utils/cache';
 import {
   chalkERROR,
   chalkINFO,
@@ -11,8 +12,6 @@ import {
   chalkWARN,
 } from '../utils/chalkTip';
 import Queue from '../utils/queue';
-
-import { cache } from '@/utils/cache';
 
 export const handleAliOss = function (data: BilldDeploy) {
   const { aliOssConfig: cosConfig, aliOssFileConfig: cosFileConfig } =
