@@ -80,19 +80,23 @@ export const deploy = async function (data: BilldDeploy) {
       if (config.cos(data) === CosEnum.none) {
         console.log(chalkWARN('配置了cos对象存储为none，不执行'));
       } else {
+        let res: any;
         switch (config.cos(data)) {
           case CosEnum.huawei:
-            await handleHuaweiObs(data);
+            res = await handleHuaweiObs(data);
             break;
           case CosEnum.ali:
-            await handleAliOss(data);
+            res = await handleAliOss(data);
             break;
           case CosEnum.qiniu:
-            await handleQiniuKodo(data);
+            res = await handleQiniuKodo(data);
             break;
           case CosEnum.tencent:
-            await handleTencentCos(data);
+            res = await handleTencentCos(data);
             break;
+        }
+        if (res.code !== 0) {
+          throw new Error(`cos对象存储错误！${res.msg as string}`);
         }
       }
       checkHasError();

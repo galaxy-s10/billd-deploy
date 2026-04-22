@@ -72,7 +72,7 @@ export const handleTencentCos = function (data: BilldDeploy) {
       // 添加tencentCosFileConfig目录
       allFile.push(...findFile(tencentCosFileConfig.dir.local));
     } else {
-      console.log(chalkWARN('没有配置上传本地文件到tencent-cos目录'));
+      console.log(chalkWARN('没有配置上传本地文件到腾讯云cos目录'));
     }
 
     if (tencentCosFileConfig.file) {
@@ -81,7 +81,7 @@ export const handleTencentCos = function (data: BilldDeploy) {
         allFile.push(item);
       });
     } else {
-      console.log(chalkWARN('没有配置上传本地文件到tencent-cos目录'));
+      console.log(chalkWARN('没有配置上传本地文件到腾讯云cos目录'));
     }
 
     // eslint-disable-next-line
@@ -117,7 +117,7 @@ export const handleTencentCos = function (data: BilldDeploy) {
           uploadOkRecord.set(filePath, status);
           console.log(
             chalkSUCCESS(
-              `上传tencent-cos成功(${
+              `上传腾讯云cos成功(${
                 uploadOkRecord.size
                 // eslint-disable-next-line
               }/${allFile.length}): ${filePath} ===> ${cosFlieName}`
@@ -130,7 +130,7 @@ export const handleTencentCos = function (data: BilldDeploy) {
           console.log(
             chalkERROR(
               // eslint-disable-next-line
-              `上传tencent-cos失败(${uploadErrRecord.size}/${allFile.length}): ${filePath} ===> ${cosFlieName}`
+              `上传腾讯云cos失败(${uploadErrRecord.size}/${allFile.length}): ${filePath} ===> ${cosFlieName}`
             )
           );
         }
@@ -138,18 +138,18 @@ export const handleTencentCos = function (data: BilldDeploy) {
         if (progress === allFile.length) {
           console.log(
             chalkINFO(
-              `所有文件上传tencent-cos完成。成功：${uploadOkRecord.size}/${allFile.length}；失败：${uploadErrRecord.size}/${allFile.length}`
+              `所有文件上传腾讯云cos完成。成功：${uploadOkRecord.size}/${allFile.length}；失败：${uploadErrRecord.size}/${allFile.length}`
             )
           );
 
           if (uploadErrRecord.size) {
             cache.cos = 'error';
-            console.log(chalkERROR(`上传tencent-cos失败数据`), uploadErrRecord);
+            console.log(chalkERROR(`上传腾讯云cos失败数据`), uploadErrRecord);
           }
         }
       } catch (error) {
         cache.cos = 'error';
-        console.log(chalkERROR(`上传tencent-cos错误`), error);
+        console.log(chalkERROR(`上传腾讯云cos错误`), error);
       }
     }
 
@@ -157,7 +157,13 @@ export const handleTencentCos = function (data: BilldDeploy) {
       // 这里需要限制并发数
       const uploadQueue = new Queue({
         max: 5,
-        done: () => resolve('all done~'),
+        done: () => {
+          if (uploadErrRecord.size) {
+            resolve({ code: 1, msg: '腾讯云cos上传文件存在错误记录！' });
+          } else {
+            resolve({ code: 0, msg: '' });
+          }
+        },
       });
       allFile.forEach((filePath) => {
         if (tencentCosFileConfig.file) {
@@ -201,9 +207,5 @@ export const handleTencentCos = function (data: BilldDeploy) {
     });
   } catch (error) {
     console.log(chalkERROR(`cdn脚本错误`), error);
-  }
-  if (uploadErrRecord.size) {
-    console.log(chalkERROR(`腾讯云cos上传文件存在错误记录！`));
-    throw new Error(`腾讯云cos上传文件存在错误记录！`);
   }
 };

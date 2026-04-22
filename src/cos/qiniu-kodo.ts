@@ -165,7 +165,13 @@ export const handleQiniuKodo = function (data: BilldDeploy) {
       // 这里需要限制并发数
       const uploadQueue = new Queue({
         max: 5,
-        done: () => resolve('all done~'),
+        done: () => {
+          if (uploadErrRecord.size) {
+            resolve({ code: 1, msg: '七牛云kodo上传文件存在错误记录！' });
+          } else {
+            resolve({ code: 0, msg: '' });
+          }
+        },
       });
       allFile.forEach((filePath) => {
         if (qiniuKodoFileConfig.file) {
@@ -196,9 +202,5 @@ export const handleQiniuKodo = function (data: BilldDeploy) {
     });
   } catch (error) {
     console.log(chalkERROR(`cdn脚本错误`), error);
-  }
-  if (uploadErrRecord.size) {
-    console.log(chalkERROR(`七牛云kodo上传文件存在错误记录！`));
-    throw new Error(`七牛云kodo上传文件存在错误记录！`);
   }
 };
