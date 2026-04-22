@@ -1,3 +1,12 @@
+# [3.1.0](https://github.com/galaxy-s10/billd-deploy/compare/v3.0.1...v3.1.0) (2026-04-22)
+
+
+### fix
+
+* 上传文件错误reject ([8081798](https://github.com/galaxy-s10/billd-deploy/commit/80817985c0a77f7dcf60061a8c039da643be8f87))
+
+
+
 ## [3.0.1](https://github.com/galaxy-s10/billd-deploy/compare/v3.0.0...v3.0.1) (2025-04-29)
 
 
