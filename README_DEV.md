@@ -1,3 +1,7 @@
+# 发版报错 npm ERR! 403 403 Forbidden - PUT https://registry.npmjs.org/billd-deploy - Two-factor authentication or granular access token with bypass 2fa enabled is required to publish packages.
+
+解决：https://juejin.cn/post/7623954414522712116
+
 # 本地调试
 
 > 本地调试不会构建 umd
