@@ -1,3 +1,12 @@
+# [3.2.0](https://github.com/galaxy-s10/billd-deploy/compare/v3.1.0...v3.2.0) (2026-04-22)
+
+
+### fix
+
+* readme ([f188f21](https://github.com/galaxy-s10/billd-deploy/commit/f188f213ce06d364616dc187e25c38cf3dcc31d5))
+
+
+
 # [3.1.0](https://github.com/galaxy-s10/billd-deploy/compare/v3.0.1...v3.1.0) (2026-04-22)
 
 
