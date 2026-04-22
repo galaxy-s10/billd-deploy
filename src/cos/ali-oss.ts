@@ -56,11 +56,11 @@ export const handleAliOss = function (data: BilldDeploy) {
     return res;
   }
 
-  try {
-    const uploadOkRecord = new Map(); // 上传成功记录
-    const uploadErrRecord = new Map(); // 上传失败记录
-    const allFile: string[] = []; // 所有需要上传的文件
+  const uploadOkRecord = new Map(); // 上传成功记录
+  const uploadErrRecord = new Map(); // 上传失败记录
+  const allFile: string[] = []; // 所有需要上传的文件
 
+  try {
     const client = new OSS({
       // yourregion填写Bucket所在地域。以华东1（杭州）为例，Region填写为oss-cn-hangzhou。
       region: aliOssConfig.region,
@@ -77,7 +77,7 @@ export const handleAliOss = function (data: BilldDeploy) {
       // 添加aliOssFileConfig目录
       allFile.push(...findFile(aliOssFileConfig.dir.local));
     } else {
-      console.log(chalkWARN('没有配置上传本地目录到ali-oss目录'));
+      console.log(chalkWARN('没有配置上传本地目录到阿里云oss目录'));
     }
 
     if (aliOssFileConfig.file) {
@@ -86,7 +86,7 @@ export const handleAliOss = function (data: BilldDeploy) {
         allFile.push(item);
       });
     } else {
-      console.log(chalkWARN('没有配置上传本地文件到ali-oss目录'));
+      console.log(chalkWARN('没有配置上传本地文件到阿里云oss目录'));
     }
 
     // eslint-disable-next-line
@@ -109,7 +109,7 @@ export const handleAliOss = function (data: BilldDeploy) {
           uploadOkRecord.set(filePath, status);
           console.log(
             chalkSUCCESS(
-              `上传ali-oss成功(${
+              `上传阿里云oss成功(${
                 uploadOkRecord.size
                 // eslint-disable-next-line
               }/${allFile.length}): ${filePath} ===> ${ossFlieName}`
@@ -122,7 +122,7 @@ export const handleAliOss = function (data: BilldDeploy) {
           console.log(
             chalkERROR(
               // eslint-disable-next-line
-              `上传ali-oss失败(${uploadErrRecord.size}/${allFile.length}): ${filePath} ===> ${ossFlieName}`
+              `上传阿里云oss失败(${uploadErrRecord.size}/${allFile.length}): ${filePath} ===> ${ossFlieName}`
             )
           );
         }
@@ -130,18 +130,18 @@ export const handleAliOss = function (data: BilldDeploy) {
         if (progress === allFile.length) {
           console.log(
             chalkINFO(
-              `所有文件上传ali-oss完成。成功：${uploadOkRecord.size}/${allFile.length}；失败：${uploadErrRecord.size}/${allFile.length}`
+              `所有文件上传阿里云oss完成。成功：${uploadOkRecord.size}/${allFile.length}；失败：${uploadErrRecord.size}/${allFile.length}`
             )
           );
 
           if (uploadErrRecord.size) {
             cache.cos = 'error';
-            console.log(chalkERROR(`上传ali-oss失败数据`), uploadErrRecord);
+            console.log(chalkERROR(`上传阿里云oss失败数据`), uploadErrRecord);
           }
         }
       } catch (error) {
         cache.cos = 'error';
-        console.log(chalkERROR(`上传ali-oss错误`), error);
+        console.log(chalkERROR(`上传阿里云oss错误`), error);
       }
     }
 
@@ -190,5 +190,10 @@ export const handleAliOss = function (data: BilldDeploy) {
     });
   } catch (error) {
     console.log(chalkERROR(`cdn脚本错误`), error);
+  }
+
+  if (uploadErrRecord.size) {
+    console.log(chalkERROR(`阿里云oss上传文件存在错误记录！`));
+    throw new Error(`阿里云oss上传文件存在错误记录！`);
   }
 };

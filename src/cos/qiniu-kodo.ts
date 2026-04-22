@@ -64,16 +64,16 @@ export const handleQiniuKodo = function (data: BilldDeploy) {
 
     return res;
   }
-  try {
-    const uploadOkRecord = new Map(); // 上传成功记录
-    const uploadErrRecord = new Map(); // 上传失败记录
-    const allFile: string[] = []; // 所有需要上传的文件
 
+  const uploadOkRecord = new Map(); // 上传成功记录
+  const uploadErrRecord = new Map(); // 上传失败记录
+  const allFile: string[] = []; // 所有需要上传的文件
+  try {
     if (qiniuKodoFileConfig.dir) {
       // 添加qiniuKodoFileConfig目录
       allFile.push(...findFile(qiniuKodoFileConfig.dir.local));
     } else {
-      console.log(chalkWARN('没有配置上传本地目录到qiniu目录'));
+      console.log(chalkWARN('没有配置上传本地目录到七牛云kodo目录'));
     }
 
     if (qiniuKodoFileConfig.file) {
@@ -82,7 +82,7 @@ export const handleQiniuKodo = function (data: BilldDeploy) {
         allFile.push(item);
       });
     } else {
-      console.log(chalkWARN('没有配置上传本地文件到qiniu目录'));
+      console.log(chalkWARN('没有配置上传本地文件到七牛云kodo目录'));
     }
 
     // eslint-disable-next-line
@@ -125,7 +125,7 @@ export const handleQiniuKodo = function (data: BilldDeploy) {
           uploadOkRecord.set(filePath, status);
           console.log(
             chalkSUCCESS(
-              `上传qiniu成功(${
+              `上传七牛云kodo成功(${
                 uploadOkRecord.size
                 // eslint-disable-next-line
               }/${allFile.length}): ${filePath} ===> ${key}`
@@ -138,7 +138,7 @@ export const handleQiniuKodo = function (data: BilldDeploy) {
           console.log(
             chalkERROR(
               // eslint-disable-next-line
-              `上传qiniu失败(${uploadErrRecord.size}/${allFile.length}): ${filePath} ===> ${key}`
+              `上传七牛云kodo失败(${uploadErrRecord.size}/${allFile.length}): ${filePath} ===> ${key}`
             )
           );
         }
@@ -146,18 +146,18 @@ export const handleQiniuKodo = function (data: BilldDeploy) {
         if (progress === allFile.length) {
           console.log(
             chalkINFO(
-              `所有文件上传qiniu完成。成功：${uploadOkRecord.size}/${allFile.length}；失败：${uploadErrRecord.size}/${allFile.length}`
+              `所有文件上传七牛云kodo完成。成功：${uploadOkRecord.size}/${allFile.length}；失败：${uploadErrRecord.size}/${allFile.length}`
             )
           );
 
           if (uploadErrRecord.size) {
             cache.cos = 'error';
-            console.log(chalkERROR(`上传qiniu失败数据`), uploadErrRecord);
+            console.log(chalkERROR(`上传七牛云kodo失败数据`), uploadErrRecord);
           }
         }
       } catch (error) {
         cache.cos = 'error';
-        console.log(chalkERROR(`上传qiniu错误`), error);
+        console.log(chalkERROR(`上传七牛云kodo错误`), error);
       }
     }
 
@@ -196,5 +196,9 @@ export const handleQiniuKodo = function (data: BilldDeploy) {
     });
   } catch (error) {
     console.log(chalkERROR(`cdn脚本错误`), error);
+  }
+  if (uploadErrRecord.size) {
+    console.log(chalkERROR(`七牛云kodo上传文件存在错误记录！`));
+    throw new Error(`七牛云kodo上传文件存在错误记录！`);
   }
 };

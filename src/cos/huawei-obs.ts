@@ -56,12 +56,10 @@ export const handleHuaweiObs = function (data: BilldDeploy) {
 
     return res;
   }
-
+  const uploadOkRecord = new Map(); // 上传成功记录
+  const uploadErrRecord = new Map(); // 上传失败记录
+  const allFile: string[] = []; // 所有需要上传的文件
   try {
-    const uploadOkRecord = new Map(); // 上传成功记录
-    const uploadErrRecord = new Map(); // 上传失败记录
-    const allFile: string[] = []; // 所有需要上传的文件
-
     // https://support.huaweicloud.com/sdk-nodejs-devg-obs/obs_29_0404.html
     const client = new OBS({
       access_key_id: huaweiObsConfig.access_key_id,
@@ -196,5 +194,9 @@ export const handleHuaweiObs = function (data: BilldDeploy) {
     });
   } catch (error) {
     console.log(chalkERROR(`cdn脚本错误`), error);
+  }
+  if (uploadErrRecord.size) {
+    console.log(chalkERROR(`华为云obs上传文件存在错误记录！`));
+    throw new Error(`华为云obs上传文件存在错误记录！`);
   }
 };

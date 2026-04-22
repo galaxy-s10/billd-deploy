@@ -56,11 +56,11 @@ export const handleTencentCos = function (data: BilldDeploy) {
     return res;
   }
 
-  try {
-    const uploadOkRecord = new Map(); // 上传成功记录
-    const uploadErrRecord = new Map(); // 上传失败记录
-    const allFile: string[] = []; // 所有需要上传的文件
+  const uploadOkRecord = new Map(); // 上传成功记录
+  const uploadErrRecord = new Map(); // 上传失败记录
+  const allFile: string[] = []; // 所有需要上传的文件
 
+  try {
     const client = new COS({
       SecretId: tencentCosConfig.SecretId, // 推荐使用环境变量获取；用户的 SecretId，建议使用子账号密钥，授权遵循最小权限指引，降低使用风险。子账号密钥获取可参考https://www.tencentcloud.com/document/product/598/37140?from_cn_redirect=1
       SecretKey: tencentCosConfig.SecretKey, // 推荐使用环境变量获取；用户的 SecretKey，建议使用子账号密钥，授权遵循最小权限指引，降低使用风险。子账号密钥获取可参考https://www.tencentcloud.com/document/product/598/37140?from_cn_redirect=1
@@ -201,5 +201,9 @@ export const handleTencentCos = function (data: BilldDeploy) {
     });
   } catch (error) {
     console.log(chalkERROR(`cdn脚本错误`), error);
+  }
+  if (uploadErrRecord.size) {
+    console.log(chalkERROR(`腾讯云cos上传文件存在错误记录！`));
+    throw new Error(`腾讯云cos上传文件存在错误记录！`);
   }
 };
